@@ -27,12 +27,15 @@ class SistemaDeRegistro:
         self.c.execute("SELECT * FROM estudantes")
         dados = self.c.fetchall()
 
-        for i in dados:
-            print(f'ID: {i[0]} | Nome: {i[1]} | email: {i[2]} | Tel: {i[3]} | Sexo: {i[4]} | Data de nascimento: {i[5]} | Endereço: {i[6]} | Curso: {i[7]} | Imagem: {i[8]}')
+        return dados
+
+
     def search_student(self, id):
         self.c.execute("SELECT * FROM estudantes WHERE id=?", (id,))
         dados = self.c.fetchone()
-        print(f'ID: {dados[0]} | Nome: {dados[1]} | email: {dados[2]} | Tel: {dados[3]} | Sexo: {dados[4]} | Data de nascimento: {dados[5]} | Endereço: {dados[6]} | Curso: {dados[7]} | Imagem: {dados[8]}')
+
+        return dados 
+    
     def update_student(self, novos_valores):
         query = "UPDATE estudantes SET nome=?, email=?, tel=?, sexo=?, data_nascimento=?, endereco=?, curso=?, picture=? WHERE id=?"
         self.c.execute(query, novos_valores)
