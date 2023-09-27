@@ -26,7 +26,6 @@ class SistemaDeRegistro:
     def view_all_students(self):
         self.c.execute("SELECT * FROM estudantes")
         dados = self.c.fetchall()
-
         return dados
 
 
@@ -48,7 +47,12 @@ class SistemaDeRegistro:
         self.conn.commit()
         
         messagebox.showinfo('Sucesso', f'Estudante com ID:{id} foi excluido!')
-
+    def get_all_courses(self):
+        self.c.execute("SELECT curso FROM estudantes")
+        dados = self.c.fetchall()
+        dadosOrganizados = tuple(set(tupla[0] for tupla in dados))
+        print(dadosOrganizados)
+        return dadosOrganizados
 
 # Instanciando a classe Sistema de registro
 
@@ -58,6 +62,7 @@ sistema_de_registro = SistemaDeRegistro()
 #sistema_de_registro.register_student(estudante)
 
 #sistema_de_registro.view_all_students()
+#sistema_de_registro.get_all_courses()
 
 # TRATAR O ERRO QUANDO ID INEXISTENTE
 #aluno = sistema_de_registro.search_student(3)

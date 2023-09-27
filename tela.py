@@ -62,6 +62,27 @@ imagem = ImageTk.PhotoImage(imagem)
 l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
 l_imagem.place(x=410, y=10)
 
+# SALVANDO ARQUIVOS
+
+def mostrar_cursos():
+    cursos=ler_cursos()
+    c_curso=ttk.Combobox(frame_detalhes,width=20,font=("Ivy 8 bold"), justify="center")
+    c_curso['values']=(cursos)
+    c_curso.place(x=230,y=160)
+
+def ler_cursos():
+    import pickle
+    with open("cursos.dat",'rb') as arquivo:
+        cursos=pickle.load(arquivo)
+    return cursos
+
+def escrever_cursos(curso):
+    import pickle
+    cursos=ler_cursos()
+    cursos.append(curso)
+    with open("cursos.dat",'wb') as arquivo:
+        pickle.dump(cursos,arquivo)
+
 # CRUD
 # create
 
@@ -74,10 +95,16 @@ def adicionar():
     sexo = c_sexo.get()
     data = data_nascimento.get_date()
     endereco = e_endereco.get()
-    curso = c_curso.get()
     img = imagem_string
+    curso=c_curso.get().capitalize()
+    #adicionando o curso na lista
 
-    lista = [nome, email, tel, sexo, data, endereco, curso, img]
+    cursos=ler_cursos()
+    if not curso in cursos:
+        escrever_cursos(curso)
+        mostrar_cursos()
+
+    lista=[nome,email,tel,sexo,data,endereco,curso,img]
 
     for item in lista:
         if (item == ''):
@@ -144,10 +171,15 @@ def atualizar():
     sexo = c_sexo.get()
     data = data_nascimento.get_date()
     endereco = e_endereco.get()
-    curso = c_curso.get()
     img = imagem_string
+    curso=c_curso.get().capitalize()
 
-    lista = [nome, email, tel, sexo, data, endereco, curso, img, id_aluno]
+    #adicionando o curso na lista
+    cursos=ler_cursos()
+    if not curso in cursos:
+        escrever_cursos(curso)
+        mostrar_cursos()
+    lista=[nome,email,tel,sexo,data,endereco,curso,img,id_aluno]
 
     for item in lista:
         if (item == ''):
@@ -228,11 +260,12 @@ l_endereco.place(x=227, y=70)
 e_endereco = Entry(frame_detalhes, width=20, justify='left', relief='solid')
 e_endereco.place(x=230, y=100)
 
-cursos = ['Ciência da computação', 'Medicina', 'Zootecnia', 'Matemática', 'Letras']
 l_curso = Label(frame_detalhes, text="Curso *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_curso.place(x=227, y=130)
+
+cursos=sistema_de_registro.get_all_courses()
 c_curso = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'), justify='center')
-c_curso['values'] = (cursos)
+c_curso['values'] = cursos
 c_curso.place(x=230, y=160)
 
 # funcao para escolher imagem
