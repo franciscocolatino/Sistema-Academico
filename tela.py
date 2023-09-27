@@ -64,25 +64,6 @@ l_imagem.place(x=410, y=10)
 
 # SALVANDO ARQUIVOS
 
-def mostrar_cursos():
-    cursos=ler_cursos()
-    c_curso=ttk.Combobox(frame_detalhes,width=20,font=("Ivy 8 bold"), justify="center")
-    c_curso['values']=(cursos)
-    c_curso.place(x=230,y=160)
-
-def ler_cursos():
-    import pickle
-    with open("cursos.dat",'rb') as arquivo:
-        cursos=pickle.load(arquivo)
-    return cursos
-
-def escrever_cursos(curso):
-    import pickle
-    cursos=ler_cursos()
-    cursos.append(curso)
-    with open("cursos.dat",'wb') as arquivo:
-        pickle.dump(cursos,arquivo)
-
 # CRUD
 # create
 
@@ -97,12 +78,6 @@ def adicionar():
     endereco = e_endereco.get()
     img = imagem_string
     curso=c_curso.get().capitalize()
-    #adicionando o curso na lista
-
-    cursos=ler_cursos()
-    if not curso in cursos:
-        escrever_cursos(curso)
-        mostrar_cursos()
 
     lista=[nome,email,tel,sexo,data,endereco,curso,img]
 
@@ -152,8 +127,7 @@ def procurar(id=None):
     imagem = dados[8]
     imagem_string = imagem
 
-    imagem = Image.open(imagem)
-    imagem = imagem.resize((130, 130))
+    imagem = Image.open(imagem).resize((130, 130))
     imagem = ImageTk.PhotoImage(imagem)
 
     l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
@@ -175,10 +149,8 @@ def atualizar():
     curso=c_curso.get().capitalize()
 
     #adicionando o curso na lista
-    cursos=ler_cursos()
-    if not curso in cursos:
-        escrever_cursos(curso)
-        mostrar_cursos()
+
+
     lista=[nome,email,tel,sexo,data,endereco,curso,img,id_aluno]
 
     for item in lista:
@@ -268,6 +240,9 @@ c_curso = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'), justify='c
 c_curso['values'] = cursos
 c_curso.place(x=230, y=160)
 
+def atualizar_cursos():
+    cursos = sistema_de_registro.get_all_courses()
+    c_curso['values'] = cursos
 # funcao para escolher imagem
 
 def escolher_imagem():
@@ -312,15 +287,21 @@ def mostrar_alunos(): #
     n = 0
 
     for col in list_header:
-        tree_aluno.heading(col, text=col.title(), anchor=NW)
+        tree_aluno.heading(col, command=test, text=col.title(), anchor=NW)
 
         tree_aluno.column(col, width=h[n], anchor=hd[n])
         n+=1
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
+    def on_click(event):
+        if (tree_aluno.selection() != ()):
+            procurar(tree_aluno.item(tree_aluno.selection()[0], 'values'))
 
-    tree_aluno.bind('<ButtonRelease-1>', lambda event: procurar(tree_aluno.item(tree_aluno.selection()[0], 'values')))
+    tree_aluno.bind('<ButtonRelease-1>', on_click)
+    atualizar_cursos()
 
+def test():
+    print(f'clique em')
 
 # Procurar aluno
 
