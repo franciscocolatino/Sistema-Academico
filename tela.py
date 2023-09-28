@@ -287,21 +287,22 @@ def mostrar_alunos(): #
     n = 0
 
     for col in list_header:
-        tree_aluno.heading(col, command=test, text=col.title(), anchor=NW)
+        tree_aluno.heading(col, command=lambda c=col: test(c), text=col.title(), anchor=NW)
 
         tree_aluno.column(col, width=h[n], anchor=hd[n])
         n+=1
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
     def on_click(event):
+        #print(event.widget.identify_column(event.x))
         if (tree_aluno.selection() != ()):
             procurar(tree_aluno.item(tree_aluno.selection()[0], 'values'))
-
     tree_aluno.bind('<ButtonRelease-1>', on_click)
     atualizar_cursos()
 
-def test():
-    print(f'clique em')
+def test(c):
+    print(f'clique em {c}')
+    
 
 # Procurar aluno
 

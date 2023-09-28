@@ -1,1 +1,0 @@
-tree_aluno.selection()[0]

@@ -23,8 +23,8 @@ class SistemaDeRegistro:
 
         # mostrando msg de sucesso
         messagebox.showinfo('Sucesso', 'Registro realizado com sucesso')
-    def view_all_students(self):
-        self.c.execute("SELECT * FROM estudantes")
+    def view_all_students(self, order=id):
+        self.c.execute(f"SELECT * FROM estudantes ORDER BY ")
         dados = self.c.fetchall()
         return dados
 
