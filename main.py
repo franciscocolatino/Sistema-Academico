@@ -23,8 +23,9 @@ class SistemaDeRegistro:
 
         # mostrando msg de sucesso
         messagebox.showinfo('Sucesso', 'Registro realizado com sucesso')
-    def view_all_students(self, order=id):
-        self.c.execute(f"SELECT * FROM estudantes ORDER BY ")
+    def view_all_students(self, order):
+        print(order)
+        self.c.execute(f"SELECT * FROM estudantes ORDER BY {order}")
         dados = self.c.fetchall()
         return dados
 
@@ -32,7 +33,6 @@ class SistemaDeRegistro:
     def search_student(self, id):
         self.c.execute("SELECT * FROM estudantes WHERE id=?", (id,))
         dados = self.c.fetchone()
-
         return dados 
     
     def update_student(self, novos_valores):
@@ -50,8 +50,7 @@ class SistemaDeRegistro:
     def get_all_courses(self):
         self.c.execute("SELECT curso FROM estudantes")
         dados = self.c.fetchall()
-        dadosOrganizados = tuple(set(tupla[0] for tupla in dados))
-        print(dadosOrganizados)
+        dadosOrganizados = tuple(set(tupla[0] for tupla in dados)) #
         return dadosOrganizados
 
 # Instanciando a classe Sistema de registro

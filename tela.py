@@ -263,11 +263,11 @@ botao_carregar = Button(frame_detalhes, command=escolher_imagem, text='Carregar 
 botao_carregar.place(x=410, y=160)
 
 # Tabela alunos
-def mostrar_alunos(): #
+def mostrar_alunos(order='id'): #
 
     list_header = ['id', 'Nome', 'email', 'Telefone', 'sexo', 'Data', 'Endereço', 'Curso']
 
-    df_list = sistema_de_registro.view_all_students()
+    df_list = sistema_de_registro.view_all_students(order)
 
     tree_aluno = ttk.Treeview(frame_tabela, selectmode='extended', columns=list_header, show='headings')
     
@@ -287,7 +287,7 @@ def mostrar_alunos(): #
     n = 0
 
     for col in list_header:
-        tree_aluno.heading(col, command=lambda c=col: test(c), text=col.title(), anchor=NW)
+        tree_aluno.heading(col, command=lambda c=col: atualizando_ordem(c), text=col.title(), anchor=NW)
 
         tree_aluno.column(col, width=h[n], anchor=hd[n])
         n+=1
@@ -297,11 +297,21 @@ def mostrar_alunos(): #
         #print(event.widget.identify_column(event.x))
         if (tree_aluno.selection() != ()):
             procurar(tree_aluno.item(tree_aluno.selection()[0], 'values'))
-    tree_aluno.bind('<ButtonRelease-1>', on_click)
+    tree_aluno.bind('<Return>', on_click)
     atualizar_cursos()
 
-def test(c):
-    print(f'clique em {c}')
+def atualizando_ordem(coluna):
+    infos = {
+        'id': 'id', 
+        'Nome': 'nome', 
+        'email': 'email', 
+        'Telefone': 'tel', 
+        'sexo': 'sexo', 
+        'Data': 'data_nascimento', 
+        'Endereço': 'endereco', 
+        'Curso': 'curso'
+    }
+    mostrar_alunos(infos[coluna])
     
 
 # Procurar aluno
