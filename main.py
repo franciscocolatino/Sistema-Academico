@@ -50,8 +50,10 @@ class SistemaDeRegistro:
     def get_all_courses(self):
         self.c.execute("SELECT curso FROM estudantes")
         dados = self.c.fetchall()
-        dadosOrganizados = tuple(set(tupla[0] for tupla in dados)) #
-        return dadosOrganizados
+        valores = set()
+        for tupla in dados:
+            valores.add(tupla[0]) #
+        return tuple(valores)
 
 # Instanciando a classe Sistema de registro
 

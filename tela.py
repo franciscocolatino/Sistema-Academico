@@ -29,7 +29,33 @@ janela.configure(background=co1)
 janela.resizable(width=FALSE, height=FALSE)
 
 style = Style(janela)
-style.theme_use("clam") #
+style.theme_use("clam") 
+
+def sobre():
+    Help=Tk()
+    Help.title("Sobre o projeto:")
+    Help.geometry("450x300")
+    Help.configure(background=co1)
+    #Help.resizable(width=FALSE, height=FALSE)
+    
+    texto="Universidade Federal de Alagoas-UFAL\n\nProjeto AB2\n\nDisciplina: Algoritmos de Programaçção (APC)\n\n\n\n\n\n\nEquipe:\nAnderson da Silva Passos\nFrancisco Colatino de Lima"
+    frame_help=Frame(Help,width=400, height=250, bg=co1,relief=RAISED)
+    frame_help.place(relx=0.09, rely=0.05)
+    h_nome=Label(frame_help, text=texto, anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co0, compound=LEFT,justify="center")
+    h_nome.place(x=0,y=0)
+    Help.mainloop()
+
+
+
+barrademenus=Menu(janela)
+
+
+#menu geral opcoes
+menuopcoes=Menu(barrademenus, tearoff=0)
+menuopcoes.add_command(label="Sobre",command=sobre)
+janela.config(menu=menuopcoes)
+
+
 
 # Criando Frames
 
@@ -49,21 +75,34 @@ frame_tabela.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW, columnspan=5) #
 
 global imagem, imagem_string, l_imagem
 
-app_lg = Image.open('logo.png')
-app_lg = app_lg.resize((50, 50))
+#varivael imagem
+imagem_string=''  #corrigir bugs
+
+
+app_lg = Image.open('logo.png').resize((50,50))
 app_lg = ImageTk.PhotoImage(app_lg)
 app_logo = Label(frame_logo, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=('Verdana 15'), bg=co6, fg=co1)
 app_logo.place(x=5, y=0)
 
 
-imagem = Image.open('logo.png')
-imagem = imagem.resize((130, 130))
+imagem = Image.open('logo.png').resize((130,130))
 imagem = ImageTk.PhotoImage(imagem)
 l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
 l_imagem.place(x=410, y=10)
 
 # SALVANDO ARQUIVOS
 
+
+#função logo
+def imagem_logo():  #corrigir bugs--------------------------------
+    global imagem, l_imagem
+    imagem=Image.open("logo.png")
+    imagem=imagem.resize((130,130))
+    imagem=ImageTk.PhotoImage(imagem)
+
+    l_imagem=Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+    l_imagem.place(x=410,y=10)
+#--------------------------------------------------------
 # CRUD
 # create
 
@@ -95,6 +134,7 @@ def adicionar():
     e_endereco.delete(0, END)
     c_curso.delete(0, END)
 
+    imagem_logo()
     mostrar_alunos()
 
 # search
@@ -167,12 +207,7 @@ def atualizar():
     e_endereco.delete(0, END)
     c_curso.delete(0, END)
 
-    imagem = Image.open('logo.png')
-    imagem = imagem.resize((130, 130))
-    imagem = ImageTk.PhotoImage(imagem)
-
-    l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-    l_imagem.place(x=410, y=10)
+    imagem_logo()
 
     mostrar_alunos()
 # Criando os campos de entrada
@@ -198,6 +233,7 @@ def deletar():
     l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
     l_imagem.place(x=410, y=10)
 
+    imagem_logo()
     mostrar_alunos()
 
 
@@ -249,15 +285,17 @@ def escolher_imagem():
     global imagem, imagem_string, l_imagem
 
     imagem = fd.askopenfilename()
-    imagem_string = imagem
+    print(imagem)
+    if (imagem == () or imagem == ''):
+        imagem_logo()
+    else:
+        imagem_string = imagem
+        imagem = Image.open(imagem).resize((130, 130))
+        imagem = ImageTk.PhotoImage(imagem)
+        l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+        l_imagem.place(x=410, y=10)
 
-    imagem = Image.open(imagem)
-    imagem = imagem.resize((130, 130))
-    imagem = ImageTk.PhotoImage(imagem)
-    l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-    l_imagem.place(x=410, y=10)
-
-    botao_carregar['text'] = 'Trocar de foto'
+        botao_carregar['text'] = 'Trocar de foto'
 
 botao_carregar = Button(frame_detalhes, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
