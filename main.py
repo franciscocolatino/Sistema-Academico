@@ -24,7 +24,6 @@ class SistemaDeRegistro:
         # mostrando msg de sucesso
         messagebox.showinfo('Sucesso', 'Registro realizado com sucesso')
     def view_all_students(self, order):
-        print(order)
         self.c.execute(f"SELECT * FROM estudantes ORDER BY {order}")
         dados = self.c.fetchall()
         return dados
@@ -52,7 +51,7 @@ class SistemaDeRegistro:
         dados = self.c.fetchall()
         valores = set()
         for tupla in dados:
-            valores.add(tupla[0]) #
+            valores.add(tupla[0]) 
         return tuple(valores)
 
 # Instanciando a classe Sistema de registro

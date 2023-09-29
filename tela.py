@@ -126,13 +126,7 @@ def adicionar():
             return
     sistema_de_registro.register_student(lista)
 
-    e_nome.delete(0, END)
-    e_email.delete(0, END)
-    e_tel.delete(0, END)
-    c_sexo.delete(0, END)
-    data_nascimento.delete(0, END)
-    e_endereco.delete(0, END)
-    c_curso.delete(0, END)
+    limpando_inputs()
 
     imagem_logo()
     mostrar_alunos()
@@ -148,13 +142,8 @@ def procurar(id=None):
         id = id[0]
         e_procurar.insert(END, id)
     dados = sistema_de_registro.search_student(id)
-    e_nome.delete(0, END)
-    e_email.delete(0, END)
-    e_tel.delete(0, END)
-    c_sexo.delete(0, END)
-    data_nascimento.delete(0, END)
-    e_endereco.delete(0, END)
-    c_curso.delete(0, END)
+    
+    limpando_inputs()
 
     e_nome.insert(END, dados[1])
     e_email.insert(END, dados[2])
@@ -199,14 +188,7 @@ def atualizar():
             return
     sistema_de_registro.update_student(lista)
 
-    e_nome.delete(0, END)
-    e_email.delete(0, END)
-    e_tel.delete(0, END)
-    c_sexo.delete(0, END)
-    data_nascimento.delete(0, END)
-    e_endereco.delete(0, END)
-    c_curso.delete(0, END)
-
+    limpando_inputs() 
     imagem_logo()
 
     mostrar_alunos()
@@ -219,6 +201,12 @@ def deletar():
     
     sistema_de_registro.delete_student(id_aluno)
 
+    limpando_inputs()
+
+    imagem_logo()
+    mostrar_alunos()
+
+def limpando_inputs():
     e_nome.delete(0, END)
     e_email.delete(0, END)
     e_tel.delete(0, END)
@@ -226,16 +214,6 @@ def deletar():
     data_nascimento.delete(0, END)
     e_endereco.delete(0, END)
     c_curso.delete(0, END)
-
-    e_procurar.delete(0, END)
-    imagem = Image.open('logo.png').resize((130, 130))
-    imagem = ImageTk.PhotoImage(imagem)
-    l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-    l_imagem.place(x=410, y=10)
-
-    imagem_logo()
-    mostrar_alunos()
-
 
 l_nome = Label(frame_detalhes, text="Nome *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_nome.place(x=4, y=10)
@@ -285,7 +263,6 @@ def escolher_imagem():
     global imagem, imagem_string, l_imagem
 
     imagem = fd.askopenfilename()
-    print(imagem)
     if (imagem == () or imagem == ''):
         imagem_logo()
     else:
@@ -332,7 +309,6 @@ def mostrar_alunos(order='id'): #
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
     def on_click(event):
-        #print(event.widget.identify_column(event.x))
         if (tree_aluno.selection() != ()):
             procurar(tree_aluno.item(tree_aluno.selection()[0], 'values'))
     tree_aluno.bind('<Return>', on_click)
@@ -368,20 +344,17 @@ botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
 # Botoes
 
-app_img_add = Image.open('mais.png')
-app_img_add = app_img_add.resize((25,25))
+app_img_add = Image.open('mais.png').resize((25,25))
 app_img_add = ImageTk.PhotoImage(app_img_add)
 app_add = Button(frame_botoes, command=adicionar, image=app_img_add, relief=GROOVE, text=' Adicionar', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
 app_add.grid(row=1, column=0, pady=5, padx=10, sticky=NSEW)
 
-app_img_atualizar = Image.open('atualizar.png')
-app_img_atualizar = app_img_atualizar.resize((25,25))
+app_img_atualizar = Image.open('atualizar.png').resize((25,25))
 app_img_atualizar = ImageTk.PhotoImage(app_img_atualizar)
 app_atualizar = Button(frame_botoes, command=atualizar, image=app_img_atualizar, relief=GROOVE, text=' Atualizar', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
 app_atualizar.grid(row=2, column=0, pady=5, padx=10, sticky=NSEW)
 
-app_img_deletar = Image.open('botao-apagar.png')
-app_img_deletar = app_img_deletar.resize((25,25))
+app_img_deletar = Image.open('botao-apagar.png').resize((25,25))
 app_img_deletar = ImageTk.PhotoImage(app_img_deletar)
 app_deletar = Button(frame_botoes, command=deletar, image=app_img_deletar, relief=GROOVE, text=' Excluir', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
 app_deletar.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
