@@ -1,7 +1,7 @@
 import sqlite3
 from tkinter import messagebox
 
-class SistemaDeRegistro:
+class SistemaAcademico:
     def __init__(self):
         self.conn = sqlite3.connect('estudante.db')
         self.c = self.conn.cursor()
@@ -56,7 +56,7 @@ class SistemaDeRegistro:
 
 # Instanciando a classe Sistema de registro
 
-sistema_de_registro = SistemaDeRegistro()
+sistema_academico = SistemaAcademico()
 
 #estudante = ('Elena', 'elena@gmail.com', '28247287', 'F', '01/05/2007', 'SP, Brasil', 'Medicina', 'imagem2.png')
 #sistema_de_registro.register_student(estudante)
