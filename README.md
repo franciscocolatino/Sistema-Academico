@@ -10,8 +10,8 @@ Obs.: é necessário ter o pip instalado em sua máquina
 
 3. NÃO excluir os arquivos de imagem em png
 
-4.Executar o arquivo "Tela.py"
+4.Executar o arquivo "tela.py"
 
 ------------------------------------------------------------------------------------------------
 obs: Após o cadastro do primeiro aluno, um arquivo chamado "estudante.db" será criado.
-Se o mesmo futuramente for exluido, TODOS os alunos cadastrados seráo perdidos!.
+Se o mesmo futuramente for exluído, TODOS os alunos cadastrados seráo perdidos!.
