@@ -2,16 +2,24 @@
 
 Siga as instruções e coloque todos os arquivos em um mesmo diretório.
 
-1. Extrair o arquivo "Projeto_AB2-Sistema_Academico
+## Executar O Projeto
 
-2. Executar o comando para instalar as dependencias
-pip install -r requirements.txt
-Obs.: é necessário ter o pip instalado em sua máquina
-
-3. NÃO excluir os arquivos de imagem em png
-
-4.Executar o arquivo "tela.py"
-
+- Clone o repositório em sua máquina:
+  ```bash
+  $ git clone https://github.com/franciscocolatino/Sistema-Academico
+  ```
+- Acesse o repositório usando:
+  ```bash
+  $ cd Sistema-Academico
+  ```
+- Instalando as dependências:
+  ```bash
+  $ pip install -r requirements.txt
+  ```
+ Obs.: é necessário ter o pip instalado em sua máquina
+- Executar o arquivo "tela.py"
 ------------------------------------------------------------------------------------------------
-obs: Após o cadastro do primeiro aluno, um arquivo chamado "estudante.db" será criado.
-Se o mesmo futuramente for exluído, TODOS os alunos cadastrados seráo perdidos!.
+
+## Observações
+    - Após executar o projeto pela primeira vez, um arquivo chamado "estudante.db" será criado.
+    - Se o mesmo futuramente for exluído, TODOS os alunos cadastrados seráo perdidos!.

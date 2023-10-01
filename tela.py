@@ -82,7 +82,7 @@ l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
 l_imagem.place(x=410, y=10)
 
 #função logo
-def imagem_logo():  #corrigir bugs--------------------------------
+def imagem_logo():
     global imagem, l_imagem
     imagem=Image.open("images/logo.png")
     imagem=imagem.resize((130,130))
@@ -90,7 +90,7 @@ def imagem_logo():  #corrigir bugs--------------------------------
 
     l_imagem=Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
     l_imagem.place(x=410,y=10)
-#--------------------------------------------------------
+
 # CRUD
 
 def criar():
@@ -117,8 +117,6 @@ def criar():
 
     imagem_logo()
     mostrar_alunos()
-
-# search
 
 def procurar(id=None):
     global imagem, imagem_string, l_imagem
@@ -164,8 +162,6 @@ def atualizar():
     img = imagem_string
     curso=c_curso.get().capitalize()
 
-    #adicionando o curso na lista
-
     lista=[nome,email,tel,sexo,data,endereco,curso,img,id_aluno]
 
     for item in lista:
@@ -182,11 +178,9 @@ def deletar():
     global imagem, imagem_string, l_imagem
 
     id_aluno = int(e_procurar.get())
-    
     sistema_academico.delete_student(id_aluno)
 
     limpando_inputs()
-
     imagem_logo()
     mostrar_alunos()
 
@@ -202,8 +196,6 @@ def limpando_inputs():
 def atualizar_cursos():
     cursos = sistema_academico.get_all_courses()
     c_curso['values'] = cursos
-
-# funcao para escolher imagem
 
 def escolher_imagem():
     global imagem, imagem_string, l_imagem
@@ -271,12 +263,11 @@ def mostrar_alunos(order='id'): #
     
     atualizar_cursos()
 
-
-# Botão carregar imagem
 botao_carregar = Button(frame_detalhes, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
 
 # Criando os campos de entrada
+
 l_nome = Label(frame_detalhes, text="Nome *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_nome.place(x=4, y=10)
 e_nome = Entry(frame_detalhes, width=25, justify='left', relief='solid')
@@ -330,7 +321,7 @@ e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
 botao_procurar = Button(frame_procurar, command=procurar, text='Procurar', width=9, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
-# Botoes
+# Botoes Adicionar, atualizar, deletar
 
 app_img_add = Image.open('images/mais.png').resize((25,25))
 app_img_add = ImageTk.PhotoImage(app_img_add)
@@ -346,8 +337,6 @@ app_img_deletar = Image.open('images/botao-apagar.png').resize((25,25))
 app_img_deletar = ImageTk.PhotoImage(app_img_deletar)
 app_deletar = Button(frame_botoes, command=deletar, image=app_img_deletar, relief=GROOVE, text=' Excluir', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
 app_deletar.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
-
-# LINHA
 
 l_linha = Label(frame_botoes, relief=GROOVE, text='', width=1, height=123, anchor=NW, font=('Ivy 1'), bg=co2, fg=co1)
 l_linha.place(x=245, y=15)
