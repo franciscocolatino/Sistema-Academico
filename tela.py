@@ -74,7 +74,7 @@ def tela_alunos_disciplinas(disciplina, periodo, curso_name):
     l_disciplina_aluno=Label(frame_nome_aluno, text=f"Disciplina: {disciplina}", anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co4)
     l_disciplina_aluno.place(x=50,y=7)
 
-    l_periodo_aluno=Label(frame_nome_aluno, text=f"Periodo: {periodo}", anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co4)
+    l_periodo_aluno=Label(frame_nome_aluno, text=f"Período: {periodo}", anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co4)
     l_periodo_aluno.place(x=370,y=7)
     mostrar_disciplina(curso_name, periodo)
     aluno.mainloop()
@@ -497,14 +497,14 @@ c_curso2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="cent
 c_curso2['values']=(cursos)
 c_curso2.place(x=40,y=40)
 
-periodos=[1,2]
-l_periodo2=Label(frame_details2, text="Periodo", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+periodos=('1','2','3','4','5','6','7','8')
+l_periodo2=Label(frame_details2, text="Período*", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
 l_periodo2.place(x=300,y=3)
 e_periodo2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="center")
 e_periodo2['values']=(periodos) 
 e_periodo2.place(x=300,y=40)
 
-l_disciplina2=Label(frame_details2, text="Disciplina", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_disciplina2=Label(frame_details2, text="Disciplina*", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
 l_disciplina2.place(x=40,y=100)
 c_disciplina2=Entry(frame_details2, width=20, justify="left", relief="solid")
 c_disciplina2.place(x=40,y=140)
