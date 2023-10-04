@@ -41,3 +41,5 @@ class Curso:
         self.c.execute("DELETE FROM cursos WHERE id=?", (id,))
         self.conn.commit()
         messagebox.showinfo('Sucesso', f'Curso com ID:{id} foi excluido!')
+
+cursos_db = Curso()

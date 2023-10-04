@@ -54,3 +54,5 @@ class CursoDisciplina:
         self.c.execute("UPDATE cursos_disciplinas SET curso_id=?, disciplina_id=? WHERE id=?", novos_valores)
         self.conn.commit()
         messagebox.showinfo('Sucesso', f'Relacionamento de cursos com disciplinas com ID:{novos_valores[2]} foi atualizado!')
+
+CursoDisciplina_db = CursoDisciplina()

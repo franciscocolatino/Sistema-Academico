@@ -15,20 +15,17 @@ from datetime import date
 from main import *
 from db.app import *
 
-
-
 co0 = "#2e2d2b"  # Preta
 co1 = "#feffff"  # Branca   
 co2 = "#e5e5e5"  # grey
 co3 = "#00a095"  # Verde
 co4 = "#403d3d"   # letra
-co6 = "#003452"   # azul
+  
 co7 = "#ef5350"   # vermelha
-
 co6 = "#146C94"   # azul
 co8 = "#263238"   # + verde
 co9 = "#e9edf5"   # + verde
-
+co10 = "#003452" # azul
 #criando janela
 janela=Tk()
 janela.title("Sistema de Registro de Alunos")
@@ -41,13 +38,9 @@ janelatabs=ttk.Notebook(janela)
 janelatabs.place(x=0,y=0,width=810,height=545)
 tb1=Frame(janelatabs)
 tb2=Frame(janelatabs)
-tb3=Frame(janelatabs)
-
 
 janelatabs.add(tb1, text="Registro")
 janelatabs.add(tb2, text="Disciplinas")
-janelatabs.add(tb3, text="teste")
-
 
 
 #---------------------------------------------------------------------
@@ -58,10 +51,10 @@ def sobre():
     Help.configure(background=co1)
     Help.resizable(width=FALSE, height=FALSE)
     
-    texto="Universidade Federal de Alagoas-UFAL\n\nTranalho AB2 da disciplina Algoritmos de Programaçção (APC)\n\n\n\n\n\n\nEquipe: Anderson da Silva Passos, Francisco Colatino"
+    texto="Universidade Federal de Alagoas-UFAL\n\nProjeto AB2\n\nDisciplina: Algoritmos de Programaçção (APC)\n\n\n\n\n\n\nEquipe:\nAnderson da Silva Passos\nFrancisco Colatino de Lima"
     frame_help=Frame(Help,width=400, height=250, bg=co1,relief=RAISED)
     frame_help.place(relx=0.09, rely=0.05)
-    h_nome=Label(frame_help, text=texto, anchor=NW, font=("Ivy 10"), bg=co1, fg=co0, compound=LEFT,justify="center")
+    h_nome=Label(frame_help, text=texto, anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co0, compound=LEFT,justify="center")
     h_nome.place(x=0,y=0)
     Help.mainloop()
 
@@ -69,7 +62,7 @@ def sobre():
 def tela_alunos_disciplinas(disciplina, periodo, curso_name):
     global frame_tabela_aluno
     aluno=Tk()
-    aluno.title("Sobre o projeto:")
+    aluno.title(curso_name)
     aluno.geometry("600x450")
     aluno.configure(background=co1)
     aluno.resizable(width=FALSE, height=FALSE)
@@ -125,17 +118,7 @@ frame_details2.grid(row=1, column=1, pady=1, padx=10, sticky=NSEW)
 frame_tabela2=Frame(tb2,width=800, height=100, bg=co1,relief=SOLID)
 frame_tabela2.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
 
-# #Aba 3
-# frame_logo3=Frame(tb3,width=850, height=52, bg=co1)
-# frame_logo3.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
 
-# frame_details3=Frame(tb3,width=850, height=80, bg=co1,relief=SOLID)
-# frame_details3.grid(row=1, column=0, pady=1, padx=10, sticky=NSEW)
-
-# frame_tabela3=Frame(tb3,width=700, height=545, bg=co1,relief=SOLID)
-# frame_tabela3.grid(row=2, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
-
-#-------------------------------------------------------------------- 
 # Trabalhando no frame logo
 
 global imagem, imagem_string, l_imagem
@@ -144,16 +127,15 @@ imagem_string=''  #corrigir bugs
 
 app_lg = Image.open('images/logo.png').resize((50,50))
 app_lg = ImageTk.PhotoImage(app_lg)
-app_logo = Label(frame_logo, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=('Verdana 15'), bg=co6, fg=co1)
+app_logo = Label(frame_logo, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=('Verdana 15'), bg=co10, fg=co1)
 app_logo.place(x=5, y=0)
 
 
 #-------------------------------------------------------------------- atualizaçao
-app_logo2=Label(frame_logo2, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
+app_logo2=Label(frame_logo2, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co10, fg=co1)
 app_logo2.place(x=5,y=0)
 
-# app_logo3=Label(frame_logo3, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
-# app_logo3.place(x=5,y=0)
+
 #-------------------------------------------------------------------- 
 
 imagem = Image.open('images/logo.png').resize((130,130))
@@ -222,7 +204,7 @@ def procurar(id=None):
         c_sexo.insert(END, dados[4])
         data_nascimento.insert(END, dados[5])
         e_endereco.insert(END, dados[6])
-        c_periodo.insert(END, dados[-2])
+        c_periodo.insert(END, dados[-4])
         c_curso.insert(END, dados[-1])
 
         imagem = dados[7]
@@ -250,12 +232,13 @@ def atualizar():
     periodo = c_periodo.get()
     curso_name = c_curso.get().capitalize()
     curso_id = cursos_db.get_course_id(curso_name)
-    lista=[nome,email,tel,sexo,data,endereco,img,periodo,curso_id,id_aluno]
+    lista=[nome,email,tel,sexo,data,endereco,img,periodo,curso_id[0],id_aluno]
 
     for item in lista:
         if (item == ''):
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
+    print(lista)
     sistema_academico.update_student(lista)
 
     limpando_inputs() 
@@ -371,7 +354,7 @@ def criar_disciplinas():
     # creating a treeview with dual scrollbars
     list_header = ["ID","Curso","Disciplina","Período"]
 
-    tree_aluno = ttk.Treeview(frame_tabela2, selectmode="extended",columns=list_header, show="headings")
+    tree_aluno = ttk.Treeview(frame_tabela2, selectmode="extended",columns=list_header, show="headings",height=9)
     
     # view all students
     df_list = cursoDisciplina_db.get_all_courses_disciplinas()
@@ -408,6 +391,7 @@ def criar_disciplinas():
     def on_click_tela(event):
         if (tree_aluno.selection() != ()):
             dados = tree_aluno.item(tree_aluno.selection()[0], 'values')
+            print(dados)
             periodo = dados[3]
             disciplina_name = dados[2]
             curso_name = dados[1]
@@ -422,12 +406,8 @@ def mostrar_disciplina(curso_name, periodo):
 
     tree_aluno = ttk.Treeview(frame_tabela_aluno, selectmode="extended",columns=list_header, show="headings",height=18)
     curso_id = cursos_db.check_course_exists(curso_name)
-    print(curso_id)
     # view all students
     df_list = sistema_academico.get_students_one_discipline(curso_id, periodo)
-
-    
-
     # vertical scrollbar
     vsb = ttk.Scrollbar(frame_tabela_aluno, orient="vertical", command=tree_aluno.yview)   
     # horizontal scrollbar
@@ -455,7 +435,7 @@ def mostrar_disciplina(curso_name, periodo):
 
 
 #--------------------------------------------------------------------atualizacao
-botao_carregar = Button(frame_details, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
+botao_carregar = Button(frame_details, command=escolher_imagem, text='CARREGAR FOTO', width=17, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
 
 # Criando os campos de entrada
@@ -512,34 +492,32 @@ c_periodo.place(x=230, y=210)
 #--------------------------------------------------------------------
 #aba2
 l_curso2=Label(frame_details2, text="Curso*", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-l_curso2.place(x=4,y=3)
+l_curso2.place(x=40,y=3)
 c_curso2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="center")
 c_curso2['values']=(cursos)
-c_curso2.place(x=4,y=40)
+c_curso2.place(x=40,y=40)
 
-periodos=(1,2,3,4,5,6,7,8)
+periodos=[1,2]
 l_periodo2=Label(frame_details2, text="Periodo", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-l_periodo2.place(x=250,y=3)
+l_periodo2.place(x=300,y=3)
 e_periodo2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="center")
 e_periodo2['values']=(periodos) 
-e_periodo2.place(x=250,y=40)
+e_periodo2.place(x=300,y=40)
 
-l_disciplina2=Label(frame_details2, text="Nome da disciplina", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-l_disciplina2.place(x=4,y=100)
+l_disciplina2=Label(frame_details2, text="Disciplina", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_disciplina2.place(x=40,y=100)
 c_disciplina2=Entry(frame_details2, width=20, justify="left", relief="solid")
-c_disciplina2.place(x=4,y=140)
+c_disciplina2.place(x=40,y=140)
+
+imagem2=Image.open("images/logo.png")
+imagem2=imagem2.resize((150,150))
+imagem2=ImageTk.PhotoImage(imagem2)
+
+l_imagem2=Label(frame_details2, image=imagem2, bg=co1, fg=co4)
+l_imagem2.place(x=290,y=70)
 #--------------------------------------------------------------------
-#aba3
 
-# l_nome=Label(frame_details3, text="Procurar Aluno [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-# l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
 
-# e_procurar=Entry(frame_tabela3, width=5, justify="center", relief="solid", font=("Ivy 10"))
-# e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
-
-# botao_procurar=Button(frame_details3,command="",text="Procurar",width=12, anchor=CENTER, overrelief=RIDGE,
-#                       font=('Ivy 7 bold'), bg=co1,fg=co0)
-# botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
 #--------------------------------------------------------------------atualizacao
 #Procurar aluno aba1
@@ -552,7 +530,7 @@ l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
 e_procurar=Entry(frame_procurar, width=5, justify="center", relief="solid", font=("Ivy 10"))
 e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
 
-botao_procurar=Button(frame_procurar,command=procurar,text="Procurar",width=9, anchor=CENTER, overrelief=RIDGE,
+botao_procurar=Button(frame_procurar,command=procurar,text="Procurar",width=6, anchor=CENTER, overrelief=RIDGE,
                       font=('Ivy 7 bold'), bg=co1,fg=co0)
 botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
@@ -574,6 +552,7 @@ def adicionar_disciplina():
     disciplina =[nome,periodo]
     disciplina_id = disciplina_db.create_discipline(disciplina)
     cursoDisciplina_db.create_course_disciplina([course_id, disciplina_id])
+
 
     limpando_inputs()
     criar_disciplinas()

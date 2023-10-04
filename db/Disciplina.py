@@ -9,7 +9,7 @@ class Disciplina:
     def create_table(self):
         self.c.execute(''' CREATE TABLE IF NOT EXISTS disciplinas (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            nome TEXT NOT NULL UNIQUE,
+                            nome TEXT NOT NULL,
                             periodo INTEGER NOT NULL
                             );''')
     def create_discipline(self, disciplina):
@@ -31,3 +31,5 @@ class Disciplina:
         self.c.execute("DELETE FROM disciplinas WHERE id=?", (id,))
         self.conn.commit()
         messagebox.showinfo('Sucesso', f'Disciplina com ID:{id} foi excluida!')
+
+disciplina_db = Disciplina()
