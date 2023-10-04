@@ -16,7 +16,7 @@ Siga as instruções e coloque todos os arquivos em um mesmo diretório.
   ```bash
   $ pip install -r requirements.txt
   ```
- Obs.: é necessário ter o pip instalado em sua máquina
+  Obs.: é necessário ter o pip instalado em sua máquina
 - Executar o arquivo "tela.py"
 ------------------------------------------------------------------------------------------------
 

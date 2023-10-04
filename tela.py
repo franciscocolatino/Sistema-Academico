@@ -1,3 +1,7 @@
+import sys
+import os
+
+
 from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
@@ -7,7 +11,11 @@ from PIL import ImageTk, Image
 from tkcalendar import Calendar, DateEntry
 from datetime import date
 
+
 from main import *
+from db.app import *
+
+
 
 co0 = "#2e2d2b"  # Preta
 co1 = "#feffff"  # Branca   
@@ -21,50 +29,92 @@ co6 = "#146C94"   # azul
 co8 = "#263238"   # + verde
 co9 = "#e9edf5"   # + verde
 
-# criando janela
-janela = Tk()
-janela.title("")
-janela.geometry('810x535')
+#criando janela
+janela=Tk()
+janela.title("Sistema de Registro de Alunos")
+janela.geometry("810x545")
 janela.configure(background=co1)
 janela.resizable(width=FALSE, height=FALSE)
 
-style = Style(janela)
-style.theme_use("clam") 
-barrademenus=Menu(janela)
+#-----------------------------------------------------------alteração
+janelatabs=ttk.Notebook(janela)
+janelatabs.place(x=0,y=0,width=810,height=545)
+tb1=Frame(janelatabs)
+tb2=Frame(janelatabs)
+tb3=Frame(janelatabs)
 
-def tela_sobre():
+
+janelatabs.add(tb1, text="Registro")
+janelatabs.add(tb2, text="Disciplinas")
+janelatabs.add(tb3, text="teste")
+
+
+
+#---------------------------------------------------------------------
+def sobre():
     Help=Tk()
     Help.title("Sobre o projeto:")
     Help.geometry("450x300")
     Help.configure(background=co1)
     Help.resizable(width=FALSE, height=FALSE)
     
-    texto="Universidade Federal de Alagoas-UFAL\n\nProjeto AB2\n\nDisciplina: Algoritmos de Programaçção (APC)\n\n\n\n\n\n\nEquipe:\nAnderson da Silva Passos\nFrancisco Colatino de Lima"
+    texto="Universidade Federal de Alagoas-UFAL\n\nTranalho AB2 da disciplina Algoritmos de Programaçção (APC)\n\n\n\n\n\n\nEquipe: Anderson da Silva Passos, Francisco Colatino"
     frame_help=Frame(Help,width=400, height=250, bg=co1,relief=RAISED)
     frame_help.place(relx=0.09, rely=0.05)
-    h_nome=Label(frame_help, text=texto, anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co0, compound=LEFT,justify="center")
+    h_nome=Label(frame_help, text=texto, anchor=NW, font=("Ivy 10"), bg=co1, fg=co0, compound=LEFT,justify="center")
     h_nome.place(x=0,y=0)
     Help.mainloop()
 
-#menu com opcoes
+
+#MENU
+barrademenus=Menu(janela)
+#menu geral opcoes
 menuopcoes=Menu(barrademenus, tearoff=0)
-menuopcoes.add_command(label="Sobre",command=tela_sobre)
+menuopcoes.add_command(label="Sobre",command=sobre)
 janela.config(menu=menuopcoes)
 
+
+
+#-------------------------------------------------------------------- atualizaçao
 # Criando Frames
 
-frame_logo = Frame(janela, width=850, height=52, bg=co6)
-frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5) #
+#Aba1
+frame_logo=Frame(tb1,width=850, height=52, bg=co1)
+frame_logo.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
 
-frame_botoes = Frame(janela, width=100, height=200, bg=co1, relief=RAISED) #
-frame_botoes.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW) #
+frame_botoes=Frame(tb1,width=100, height=200, bg=co1,relief=RAISED)
+frame_botoes.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW)
 
-frame_detalhes = Frame(janela, width=800, height=100, bg=co1, relief=SOLID) #
-frame_detalhes.grid(row=1, column=1, pady=1, padx=10, sticky=NSEW) #
+frame_details=Frame(tb1,width=700, height=100, bg=co1,relief=SOLID)
+frame_details.grid(row=1, column=1, pady=1, padx=10, sticky=NSEW)
 
-frame_tabela = Frame(janela, width=800, height=100, bg=co1, relief=SOLID) #
-frame_tabela.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW, columnspan=5) #
+frame_tabela=Frame(tb1,width=800, height=100, bg=co1,relief=SOLID)
+frame_tabela.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
 
+#Aba 2
+frame_logo2=Frame(tb2,width=850, height=52, bg=co1)
+frame_logo2.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
+
+frame_botoes2=Frame(tb2,width=100, height=200, bg=co1,relief=RAISED)
+frame_botoes2.grid(row=1, column=0, pady=1, padx=0, sticky=NSEW)
+
+frame_details2=Frame(tb2,width=700, height=100, bg=co1,relief=SOLID)
+frame_details2.grid(row=1, column=1, pady=1, padx=10, sticky=NSEW)
+
+frame_tabela2=Frame(tb2,width=800, height=100, bg=co1,relief=SOLID)
+frame_tabela2.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
+
+#Aba 3
+frame_logo3=Frame(tb3,width=850, height=52, bg=co1)
+frame_logo3.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
+
+frame_details3=Frame(tb3,width=850, height=80, bg=co1,relief=SOLID)
+frame_details3.grid(row=1, column=0, pady=1, padx=10, sticky=NSEW)
+
+frame_tabela3=Frame(tb3,width=700, height=545, bg=co1,relief=SOLID)
+frame_tabela3.grid(row=2, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
+
+#-------------------------------------------------------------------- 
 # Trabalhando no frame logo
 
 global imagem, imagem_string, l_imagem
@@ -76,9 +126,18 @@ app_lg = ImageTk.PhotoImage(app_lg)
 app_logo = Label(frame_logo, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=('Verdana 15'), bg=co6, fg=co1)
 app_logo.place(x=5, y=0)
 
+
+#-------------------------------------------------------------------- atualizaçao
+app_logo2=Label(frame_logo2, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
+app_logo2.place(x=5,y=0)
+
+app_logo3=Label(frame_logo3, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
+app_logo3.place(x=5,y=0)
+#-------------------------------------------------------------------- 
+
 imagem = Image.open('images/logo.png').resize((130,130))
 imagem = ImageTk.PhotoImage(imagem)
-l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+l_imagem = Label(frame_details, image=imagem, bg=co1, fg=co4)
 l_imagem.place(x=410, y=10)
 
 #função logo
@@ -88,7 +147,7 @@ def imagem_logo():
     imagem=imagem.resize((130,130))
     imagem=ImageTk.PhotoImage(imagem)
 
-    l_imagem=Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+    l_imagem=Label(frame_details, image=imagem, bg=co1, fg=co4)
     l_imagem.place(x=410,y=10)
 
 # CRUD
@@ -103,14 +162,18 @@ def criar():
     data = data_nascimento.get_date()
     endereco = e_endereco.get()
     img = imagem_string
-    curso=c_curso.get().capitalize()
+    periodo = c_periodo.get()
+    curso_name=c_curso.get().capitalize()
+    course_id = cursos_db.check_course_exists(curso_name)
 
-    lista=[nome,email,tel,sexo,data,endereco,curso,img]
-
+    lista=[nome,email,tel,sexo,data,endereco,img,periodo,course_id]
     for item in lista:
         if (item == ''):
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
+    if (not(course_id)):
+        course_id = cursos_db.create_course(curso_name)
+    lista=[nome,email,tel,sexo,data,endereco,img,periodo,course_id]
     sistema_academico.register_student(lista)
 
     limpando_inputs()
@@ -127,25 +190,28 @@ def procurar(id=None):
         id = id[0]
         e_procurar.insert(END, id)
     dados = sistema_academico.search_student(id)
-    
-    limpando_inputs()
+     #-------------------------------------------------------------------- atualizaçao
+    if dados==None:
+        messagebox.showerror("Erro", "Esse aluno não existe!")
+    else:
+        limpando_inputs()
+        e_nome.insert(END, dados[1])
+        e_email.insert(END, dados[2])
+        e_tel.insert(END, dados[3])
+        c_sexo.insert(END, dados[4])
+        data_nascimento.insert(END, dados[5])
+        e_endereco.insert(END, dados[6])
+        c_periodo.insert(END, dados[-2])
+        c_curso.insert(END, dados[-1])
 
-    e_nome.insert(END, dados[1])
-    e_email.insert(END, dados[2])
-    e_tel.insert(END, dados[3])
-    c_sexo.insert(END, dados[4])
-    data_nascimento.insert(END, dados[5])
-    e_endereco.insert(END, dados[6])
-    c_curso.insert(END, dados[7])
+        imagem = dados[7]
+        imagem_string = imagem
 
-    imagem = dados[8]
-    imagem_string = imagem
+        imagem = Image.open(imagem).resize((130, 130))
+        imagem = ImageTk.PhotoImage(imagem)
 
-    imagem = Image.open(imagem).resize((130, 130))
-    imagem = ImageTk.PhotoImage(imagem)
-
-    l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
-    l_imagem.place(x=410, y=10)
+        l_imagem = Label(frame_details, image=imagem, bg=co1, fg=co4)
+        l_imagem.place(x=410, y=10)
 
 
 def atualizar():
@@ -160,9 +226,10 @@ def atualizar():
     data = data_nascimento.get_date()
     endereco = e_endereco.get()
     img = imagem_string
-    curso=c_curso.get().capitalize()
-
-    lista=[nome,email,tel,sexo,data,endereco,curso,img,id_aluno]
+    periodo = c_periodo.get()
+    curso_name = c_curso.get().capitalize()
+    curso_id = cursos_db.get_course_id(curso_name)
+    lista=[nome,email,tel,sexo,data,endereco,img,periodo,curso_id,id_aluno]
 
     for item in lista:
         if (item == ''):
@@ -178,11 +245,18 @@ def deletar():
     global imagem, imagem_string, l_imagem
 
     id_aluno = int(e_procurar.get())
+    aluno = sistema_academico.search_student(id_aluno)
     sistema_academico.delete_student(id_aluno)
-
+    countOne = cursoDisciplina_db.count_discipline_has_one_course(aluno[-1])
+    countTwo = sistema_academico.count_students_has_one_course(aluno[-1])
+    print(countOne)
+    print(countTwo)
+    if (countOne == 0 and countTwo == 0):
+        cursos_db.delete_course(aluno[-2])
     limpando_inputs()
     imagem_logo()
     mostrar_alunos()
+    atualizar_cursos()
 
 def limpando_inputs():
     e_nome.delete(0, END)
@@ -192,10 +266,15 @@ def limpando_inputs():
     data_nascimento.delete(0, END)
     e_endereco.delete(0, END)
     c_curso.delete(0, END)
+    c_periodo.delete(0, END)
+    c_curso2.delete(0, END)
+    e_periodo2.delete(0, END)
+    c_disciplina2.delete(0, END)
 
 def atualizar_cursos():
-    cursos = sistema_academico.get_all_courses()
+    cursos = cursos_db.get_all_courses()
     c_curso['values'] = cursos
+    c_curso2['values'] = cursos
 
 def escolher_imagem():
     global imagem, imagem_string, l_imagem
@@ -207,7 +286,7 @@ def escolher_imagem():
         imagem_string = imagem
         imagem = Image.open(imagem).resize((130, 130))
         imagem = ImageTk.PhotoImage(imagem)
-        l_imagem = Label(frame_detalhes, image=imagem, bg=co1, fg=co4)
+        l_imagem = Label(frame_details, image=imagem, bg=co1, fg=co4)
         l_imagem.place(x=410, y=10)
 
         botao_carregar['text'] = 'Trocar de foto'
@@ -221,14 +300,15 @@ def atualizando_ordem(coluna):
         'sexo': 'sexo', 
         'Data': 'data_nascimento', 
         'Endereço': 'endereco', 
-        'Curso': 'curso'
+        'Curso': 'nome_curso',
+        'P': 'periodo'
     }
     mostrar_alunos(infos[coluna])
     
 # Tabela alunos
 def mostrar_alunos(order='id'): #
 
-    lista_cabecalho = ['id', 'Nome', 'email', 'Telefone', 'sexo', 'Data', 'Endereço', 'Curso']
+    lista_cabecalho = ['id', 'Nome', 'email', 'Telefone', 'sexo', 'Data', 'Endereço', 'P', 'Curso']
 
     dados_lista = sistema_academico.view_all_students(order)
 
@@ -246,7 +326,7 @@ def mostrar_alunos(order='id'): #
     frame_tabela.grid_rowconfigure(0, weight=12)
 
     hd = ['nw', 'nw', 'nw', 'center', 'center', 'center', 'center', 'center', 'center']
-    h = [40, 150, 150, 70, 70, 70, 120, 100, 100]
+    h = [40, 150, 150, 70, 70, 70, 120, 10, 100]
     n = 0
 
     for col in lista_cabecalho:
@@ -263,83 +343,324 @@ def mostrar_alunos(order='id'): #
     
     atualizar_cursos()
 
-botao_carregar = Button(frame_detalhes, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
+
+#--------------------------------------------------------------------atualizacao
+def mostrar_disciplinas():
+
+    # creating a treeview with dual scrollbars
+    list_header = ["ID","Curso","Disciplina","Período"]
+
+    tree_aluno = ttk.Treeview(frame_tabela2, selectmode="extended",columns=list_header, show="headings")
+    
+    # view all students
+    df_list = cursoDisciplina_db.get_all_courses_disciplinas()
+
+    
+
+    # vertical scrollbar
+    vsb = ttk.Scrollbar(frame_tabela2, orient="vertical", command=tree_aluno.yview)   
+    # horizontal scrollbar
+    hsb = ttk.Scrollbar(frame_tabela2, orient="horizontal", command=tree_aluno.xview)
+
+    tree_aluno.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    tree_aluno.grid(column=0, row=1, sticky='nsew')
+    vsb.grid(column=1, row=1, sticky='ns')
+    hsb.grid(column=0, row=2, sticky='ew')
+    frame_tabela.grid_rowconfigure(0, weight=12)
+
+    hd=["center","center","center","center"]
+    h=[45,400,200,125]
+    n=0
+
+    for col in list_header:
+        tree_aluno.heading(col, text=col.title(), anchor=NW)
+        # adjust the column's width to the header string
+        tree_aluno.column(col, width=h[n],anchor=hd[n])
+
+        n+=1
+
+    for item in df_list:
+        tree_aluno.insert('', 'end', values=item)
+    def on_click(event):
+        if (tree_aluno.selection() != ()):
+            procurar_disciplina(tree_aluno.item(tree_aluno.selection()[0], 'values'))
+    tree_aluno.bind('<Return>', on_click)
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------atualizacao
+
+def mostrar_cursos():
+
+    # creating a treeview with dual scrollbars
+    list_header = ["ID","Disciplinas","Curso","Período"]
+
+    tree_aluno = ttk.Treeview(frame_tabela3, selectmode="extended",columns=list_header, show="headings",height=16)
+    
+    # view all students
+    df_list = []
+
+    
+
+    # vertical scrollbar
+    vsb = ttk.Scrollbar(frame_tabela3, orient="vertical", command=tree_aluno.yview)   
+    # horizontal scrollbar
+    hsb = ttk.Scrollbar(frame_tabela3, orient="horizontal", command=tree_aluno.xview)
+
+    tree_aluno.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+    tree_aluno.grid(column=0, row=1, sticky='nsew')
+    vsb.grid(column=1, row=1, sticky='ns')
+    hsb.grid(column=0, row=2, sticky='ew')
+    frame_tabela.grid_rowconfigure(0, weight=12)
+
+    hd=["center","center","center","center"]
+    h=[45,400,200,125]
+    n=0
+
+    for col in list_header:
+        tree_aluno.heading(col, text=col.title(), anchor=NW)
+        # adjust the column's width to the header string
+        tree_aluno.column(col, width=h[n],anchor=hd[n])
+
+        n+=1
+
+    for item in df_list:
+        tree_aluno.insert('', 'end', values=item)
+
+#--------------------------------------------------------------------
+botao_carregar = Button(frame_details, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
 
 # Criando os campos de entrada
 
-l_nome = Label(frame_detalhes, text="Nome *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+#Aba1
+l_nome = Label(frame_details, text="Nome *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_nome.place(x=4, y=10)
-e_nome = Entry(frame_detalhes, width=25, justify='left', relief='solid')
+e_nome = Entry(frame_details, width=25, justify='left', relief='solid')
 e_nome.place(x=7, y=40)
 
-l_email = Label(frame_detalhes, text="Email *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_email = Label(frame_details, text="Email *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_email.place(x=4, y=70)
-e_email = Entry(frame_detalhes, width=25, justify='left', relief='solid')
+e_email = Entry(frame_details, width=25, justify='left', relief='solid')
 e_email.place(x=7, y=100)
 
-l_tel = Label(frame_detalhes, text="Telefone *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_tel = Label(frame_details, text="Telefone *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_tel.place(x=4, y=130)
-e_tel = Entry(frame_detalhes, width=15, justify='left', relief='solid')
+e_tel = Entry(frame_details, width=15, justify='left', relief='solid')
 e_tel.place(x=7, y=160)
 
-l_sexo = Label(frame_detalhes, text="Sexo *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_sexo = Label(frame_details, text="Sexo *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_sexo.place(x=137, y=130)
-c_sexo = ttk.Combobox(frame_detalhes, width=7, font=('Ivy 8 bold'), justify='center')
+c_sexo = ttk.Combobox(frame_details, width=7, font=('Ivy 8 bold'), justify='center')
 c_sexo['values'] = ('M', 'F')
 c_sexo.place(x=140, y=160)
 
-l_data_nascimento = Label(frame_detalhes, text="Data de nascimento *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_data_nascimento = Label(frame_details, text="Data de nascimento *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_data_nascimento.place(x=227, y=10)
-data_nascimento = DateEntry(frame_detalhes, width=18, justify='center', background='darkblue', foreground='white', borderwidth=2, year=2023)
+data_nascimento = DateEntry(frame_details, width=18, justify='center', background='darkblue', foreground='white', borderwidth=2, year=2023)
 data_nascimento.place(x=230, y=40)
 
-l_endereco = Label(frame_detalhes, text="Endereco *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_endereco = Label(frame_details, text="Endereco *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_endereco.place(x=227, y=70)
-e_endereco = Entry(frame_detalhes, width=20, justify='left', relief='solid')
+e_endereco = Entry(frame_details, width=20, justify='left', relief='solid')
 e_endereco.place(x=230, y=100)
 
-l_curso = Label(frame_detalhes, text="Curso *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_curso = Label(frame_details, text="Curso *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
 l_curso.place(x=227, y=130)
 
-cursos=sistema_academico.get_all_courses()
-c_curso = ttk.Combobox(frame_detalhes, width=20, font=('Ivy 8 bold'), justify='center')
+cursos = cursos_db.get_all_courses()
+c_curso = ttk.Combobox(frame_details, width=20, font=('Ivy 8 bold'), justify='center')
 c_curso['values'] = cursos
 c_curso.place(x=230, y=160)
 
-# Procurar aluno
+l_periodo = Label(frame_details, text="Período *", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+l_periodo.place(x=227, y=190)
 
-frame_procurar = Frame(frame_botoes, width=40, height=55, bg=co1, relief=RAISED)
-frame_procurar.grid(row=0, column=0, pady=10, padx=10, sticky=NSEW)
 
-l_nome = Label(frame_procurar, text="Procurar aluno pelo ID", anchor=NW, font=('Ivy 10'), bg=co1, fg=co4)
+periodos = ('1','2','3','4','5','6','7','8')
+c_periodo = ttk.Combobox(frame_details, width=20, font=('Ivy 8 bold'), justify='center')
+c_periodo['values'] = periodos
+c_periodo.place(x=230, y=210)
+
+#--------------------------------------------------------------------
+#aba2
+l_curso2=Label(frame_details2, text="Curso*", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_curso2.place(x=4,y=3)
+c_curso2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="center")
+c_curso2['values']=(cursos)
+c_curso2.place(x=4,y=40)
+
+periodos=(1,2,3,4,5,6,7,8)
+l_periodo2=Label(frame_details2, text="Periodo", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_periodo2.place(x=250,y=3)
+e_periodo2=ttk.Combobox(frame_details2,width=20,font=("Ivy 8 bold"), justify="center")
+e_periodo2['values']=(periodos) 
+e_periodo2.place(x=250,y=40)
+
+l_disciplina2=Label(frame_details2, text="Nome da disciplina", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_disciplina2.place(x=4,y=100)
+c_disciplina2=Entry(frame_details2, width=20, justify="left", relief="solid")
+c_disciplina2.place(x=4,y=140)
+#--------------------------------------------------------------------
+#aba3
+
+l_nome=Label(frame_details3, text="Procurar Aluno [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
 l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
 
-e_procurar = Entry(frame_procurar, width=5, justify='center', relief='solid', font=('Ivy 10'))
+e_procurar=Entry(frame_tabela3, width=5, justify="center", relief="solid", font=("Ivy 10"))
 e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
 
-botao_procurar = Button(frame_procurar, command=procurar, text='Procurar', width=9, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
+botao_procurar=Button(frame_details3,command="",text="Procurar",width=12, anchor=CENTER, overrelief=RIDGE,
+                      font=('Ivy 7 bold'), bg=co1,fg=co0)
 botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
-# Botoes Adicionar, atualizar, deletar
+#--------------------------------------------------------------------atualizacao
+#Procurar aluno aba1
+frame_procurar=Frame(frame_botoes,width=40, height=55, bg=co1, relief=RAISED)
+frame_procurar.grid(row=0, column=0, pady=10, padx=10, sticky=NSEW)
 
-app_img_add = Image.open('images/mais.png').resize((25,25))
-app_img_add = ImageTk.PhotoImage(app_img_add)
-app_add = Button(frame_botoes, command=criar, image=app_img_add, relief=GROOVE, text=' Adicionar', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
-app_add.grid(row=1, column=0, pady=5, padx=10, sticky=NSEW)
+l_nome=Label(frame_procurar, text="Procurar Aluno [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
 
-app_img_atualizar = Image.open('images/atualizar.png').resize((25,25))
-app_img_atualizar = ImageTk.PhotoImage(app_img_atualizar)
-app_atualizar = Button(frame_botoes, command=atualizar, image=app_img_atualizar, relief=GROOVE, text=' Atualizar', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
-app_atualizar.grid(row=2, column=0, pady=5, padx=10, sticky=NSEW)
+e_procurar=Entry(frame_procurar, width=5, justify="center", relief="solid", font=("Ivy 10"))
+e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
 
-app_img_deletar = Image.open('images/botao-apagar.png').resize((25,25))
-app_img_deletar = ImageTk.PhotoImage(app_img_deletar)
-app_deletar = Button(frame_botoes, command=deletar, image=app_img_deletar, relief=GROOVE, text=' Excluir', width=100, compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1, fg=co0)
+botao_procurar=Button(frame_procurar,command=procurar,text="Procurar",width=9, anchor=CENTER, overrelief=RIDGE,
+                      font=('Ivy 7 bold'), bg=co1,fg=co0)
+botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
+
+
+def adicionar_disciplina():
+    nome = c_disciplina2.get()
+    periodo = e_periodo2.get()
+    curso_name=c_curso2.get().capitalize()
+    
+    course_id = cursos_db.check_course_exists(curso_name)
+    print(course_id)
+    disciplina =[nome,periodo, course_id]
+    for item in disciplina :
+        if (item == ''):
+            messagebox.showerror('Erro', 'Preencha todos os campos')
+            return
+    if (not(course_id)):
+        course_id = cursos_db.create_course(curso_name)
+    disciplina =[nome,periodo]
+    disciplina_id = disciplina_db.create_discipline(disciplina)
+    cursoDisciplina_db.create_course_disciplina([course_id, disciplina_id])
+
+    limpando_inputs()
+    mostrar_disciplinas()
+    atualizar_cursos()
+
+def deletar_disciplina():
+    curso_disciplina_id = int(e_procurar2.get())
+    print(curso_disciplina_id)
+    if (curso_disciplina_id == ''):
+            messagebox.showerror('Erro', 'Preencha o campo "Procurar disciplina" informando o id')
+            return
+    disciplina_id = cursoDisciplina_db.get_discipline_id(curso_disciplina_id)
+    print(disciplina_id)
+    cursoDisciplina_db.delete_course_discipline(curso_disciplina_id)
+    disciplina_db.delete_discipline(disciplina_id[0])
+    limpando_inputs()
+    mostrar_disciplinas()
+    atualizar_cursos()
+
+def procurar_disciplina(id=None): #
+    if (id == None):
+        id = int(e_procurar2.get())
+    else:
+        e_procurar2.delete(0, END)
+        id = id[0]
+        e_procurar2.insert(END, id)
+    dados = cursoDisciplina_db.get_discipline_with_course(id)
+     #-------------------------------------------------------------------- atualizaçao
+    if dados==None:
+        messagebox.showerror("Erro", "Esse disciplina não existe")
+    else:
+        limpando_inputs()
+        print(dados)
+        c_curso2.insert(END, dados[1])
+        c_disciplina2.insert(END, dados[2])
+        e_periodo2.insert(END, dados[3])
+
+def atualizar_disciplina():
+
+    cursoDisciplina_id = int(e_procurar2.get())
+
+    nome = c_disciplina2.get()
+    periodo = int(e_periodo2.get())
+    curso_name=c_curso2.get().capitalize()
+    lista=[nome,periodo,curso_name]
+
+    course_id = cursos_db.check_course_exists(curso_name)
+
+    for item in lista:
+        if (item == ''):
+            messagebox.showerror('Erro', 'Preencha todos os campos')
+            return
+    if (not(course_id)):
+        course_id = cursos_db.create_course(curso_name)
+        
+    disciplina_id = cursoDisciplina_db.get_discipline_id(cursoDisciplina_id)
+    disciplina_db.update_discipline([nome, periodo, disciplina_id[0]])
+    cursoDisciplina_db.update_course_discipline([course_id, disciplina_id[0], cursoDisciplina_id])
+
+    limpando_inputs() 
+    mostrar_disciplinas()
+
+#--------------------------------------------------------------------atualizacao
+
+#Procurar disciplina aba2
+frame_procurar2=Frame(frame_botoes2,width=40, height=55, bg=co1, relief=RAISED)
+frame_procurar2.grid(row=0, column=0, pady=10, padx=10, sticky=NSEW)
+
+l_nome2=Label(frame_procurar2, text="Procurar Disciplina [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+l_nome2.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
+
+e_procurar2=Entry(frame_procurar2, width=5, justify="center", relief="solid", font=("Ivy 10"))
+e_procurar2.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
+
+botao_procurar2=Button(frame_procurar2,command=procurar_disciplina,text="Procurar",width=9, anchor=CENTER, overrelief=RIDGE,
+                      font=('Ivy 7 bold'), bg=co1,fg=co0)
+botao_procurar2.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
+#--------------------------------------------------------------------
+
+
+#botoes aba1
+app_img_adicionar=Image.open("images/mais.png")
+app_img_adicionar=app_img_adicionar.resize((25,25))
+app_img_adicionar=ImageTk.PhotoImage(app_img_adicionar)
+app_adicionar=Button(frame_botoes, command=criar,image=app_img_adicionar,relief=GROOVE, text=" Adicionar",width=100,compound=LEFT, overrelief=RIDGE, font=('Ivy 11'), bg=co1,fg=co0)
+app_adicionar.grid(row=1, column=0, pady=5, padx=10, sticky=NSEW)
+
+
+app_img_atualizar=Image.open("images/atualizar.png")
+app_img_atualizar=app_img_atualizar.resize((25,25))
+app_img_atualizar=ImageTk.PhotoImage(app_img_atualizar)
+app_aualizar=Button(frame_botoes,command=atualizar,image=app_img_atualizar,relief=GROOVE, text=" Atualizar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
+app_aualizar.grid(row=2, column=0, pady=5, padx=10, sticky=NSEW)
+
+
+app_img_deletar=Image.open("images/botao-apagar.png")
+app_img_deletar=app_img_deletar.resize((25,25))
+app_img_deletar=ImageTk.PhotoImage(app_img_deletar)
+app_deletar=Button(frame_botoes,command=deletar,image=app_img_deletar,relief=GROOVE, text=" Deletar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
 app_deletar.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
 
-l_linha = Label(frame_botoes, relief=GROOVE, text='', width=1, height=123, anchor=NW, font=('Ivy 1'), bg=co2, fg=co1)
-l_linha.place(x=245, y=15)
 
+#botoes aba2
+app_adicionar2=Button(frame_botoes2, command=adicionar_disciplina,image=app_img_adicionar,relief=GROOVE, text=" Adicionar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
+app_adicionar2.grid(row=1, column=0, pady=5, padx=10, sticky=NSEW)
+
+
+app_atualizar2=Button(frame_botoes2,command=atualizar_disciplina,image=app_img_atualizar,relief=GROOVE, text=" Atualizar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
+app_atualizar2.grid(row=2, column=0, pady=5, padx=10, sticky=NSEW)
+
+
+app_deletar2=Button(frame_botoes2,command=deletar_disciplina,image=app_img_deletar,relief=GROOVE, text=" Deletar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
+app_deletar2.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
+
+
+#chamar a tabela
 mostrar_alunos()
+mostrar_disciplinas()
 janela.mainloop()

@@ -15,37 +15,39 @@ class SistemaAcademico:
                             sexo TEXT NOT NULL,
                             data_nascimento TEXT NOT NULL,
                             endereco TEXT NOT NULL,
-                            curso TEXT NOT NULL,
-                            picture TEXT NOT NULL);''')
+                            picture TEXT NOT NULL,
+                            periodo INTEGER NOT NULL,
+                            curso_id INTEGER NOT NULL,
+                            FOREIGN KEY (curso_id) REFERENCES cursos (id)
+                       );''')
     def register_student(self, estudante):
-        self.c.execute("INSERT INTO estudantes (nome, email, tel, sexo, data_nascimento, endereco, curso, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (estudante))
+        self.c.execute("INSERT INTO estudantes (nome, email, tel, sexo, data_nascimento, endereco, picture, periodo, curso_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (estudante))
         self.conn.commit()
-
-        # mostrando msg de sucesso
         messagebox.showinfo('Sucesso', 'Registro realizado com sucesso')
     def view_all_students(self, order):
-        self.c.execute(f"SELECT * FROM estudantes ORDER BY {order}")
+        self.c.execute(f"SELECT estudantes.id AS id, estudantes.nome AS nome, estudantes.email, estudantes.tel, estudantes.sexo, estudantes.data_nascimento, estudantes.endereco, estudantes.periodo, cursos.nome AS nome_curso "
+               f"FROM estudantes "
+               f"JOIN cursos ON estudantes.curso_id = cursos.id "
+               f"ORDER BY {order}")
         dados = self.c.fetchall()
         return dados
 
-
     def search_student(self, id):
-        self.c.execute("SELECT * FROM estudantes WHERE id=?", (id,))
+        self.c.execute(f"SELECT * FROM estudantes LEFT JOIN cursos ON estudantes.curso_id = cursos.id WHERE estudantes.id=?", (id,))
         dados = self.c.fetchone()
         return dados 
     
     def update_student(self, novos_valores):
-        query = "UPDATE estudantes SET nome=?, email=?, tel=?, sexo=?, data_nascimento=?, endereco=?, curso=?, picture=? WHERE id=?"
+        query = "UPDATE estudantes SET nome=?, email=?, tel=?, sexo=?, data_nascimento=?, endereco=?, picture=?, periodo=?, curso_id=? WHERE id=?"
         self.c.execute(query, novos_valores)
         self.conn.commit()
-        
         messagebox.showinfo('Sucesso', f'Estudante com ID:{novos_valores[8]} foi atualizado!')
 
     def delete_student(self, id):
         self.c.execute("DELETE FROM estudantes WHERE id=?", (id,))
         self.conn.commit()
-        
         messagebox.showinfo('Sucesso', f'Estudante com ID:{id} foi excluido!')
+
     def get_all_courses(self):
         self.c.execute("SELECT curso FROM estudantes")
         dados = self.c.fetchall()
@@ -53,24 +55,9 @@ class SistemaAcademico:
         for tupla in dados:
             valores.add(tupla[0]) 
         return tuple(valores)
-
-# Instanciando a classe Sistema de registro
-
+    def count_students_has_one_course(self, curso_id):
+        self.c.execute("SELECT COUNT(*) FROM estudantes WHERE curso_id=?", (curso_id,))
+        dados = self.c.fetchone()
+        return dados[0]
 sistema_academico = SistemaAcademico()
-
-#estudante = ('Elena', 'elena@gmail.com', '28247287', 'F', '01/05/2007', 'SP, Brasil', 'Medicina', 'imagem2.png')
-#sistema_de_registro.register_student(estudante)
-
-#sistema_de_registro.view_all_students()
-#sistema_de_registro.get_all_courses()
-
-# TRATAR O ERRO QUANDO ID INEXISTENTE
-#aluno = sistema_de_registro.search_student(3)
-
-#estudante = ('Elenaaaaaaaaa', 'elena@gmail.com', '28378179', 'F', '01/05/2007', 'SP, Brasil', 'Medicina2', 'imagem2.png', 2)
-#aluno = sistema_de_registro.update_student(estudante)
-#sistema_de_registro.search_student(2)
-
-#sistema_de_registro.delete_student(2)
-#sistema_de_registro.view_all_students()
-
+sistema_academico.view_all_students('id')
