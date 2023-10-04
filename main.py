@@ -59,5 +59,10 @@ class SistemaAcademico:
         self.c.execute("SELECT COUNT(*) FROM estudantes WHERE curso_id=?", (curso_id,))
         dados = self.c.fetchone()
         return dados[0]
+    def get_students_one_discipline(self, curso_id, periodo):
+        self.c.execute("SELECT nome FROM estudantes WHERE curso_id=? AND periodo=?", (curso_id, periodo))
+        dados = self.c.fetchmany()
+        print(dados)
+        return dados
 sistema_academico = SistemaAcademico()
 sistema_academico.view_all_students('id')

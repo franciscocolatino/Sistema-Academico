@@ -66,6 +66,27 @@ def sobre():
     Help.mainloop()
 
 
+def tela_alunos_disciplinas(disciplina, periodo, curso_name):
+    global frame_tabela_aluno
+    aluno=Tk()
+    aluno.title("Sobre o projeto:")
+    aluno.geometry("600x450")
+    aluno.configure(background=co1)
+    aluno.resizable(width=FALSE, height=FALSE)
+    frame_nome_aluno=Frame(aluno,width=600, height=50, bg=co1,relief=RAISED)
+    frame_nome_aluno.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
+    frame_tabela_aluno=Frame(aluno,width=600, height=450, bg=co1,relief=RAISED)
+    frame_tabela_aluno.grid(row=1, column=0, pady=0, padx=10, sticky=NSEW, columnspan=5)
+
+    l_disciplina_aluno=Label(frame_nome_aluno, text=f"Disciplina: {disciplina}", anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co4)
+    l_disciplina_aluno.place(x=50,y=7)
+
+    l_periodo_aluno=Label(frame_nome_aluno, text=f"Periodo: {periodo}", anchor=NW, font=("Ivy 10 bold"), bg=co1, fg=co4)
+    l_periodo_aluno.place(x=370,y=7)
+    mostrar_disciplina(curso_name, periodo)
+    aluno.mainloop()
+    
+
 #MENU
 barrademenus=Menu(janela)
 #menu geral opcoes
@@ -104,15 +125,15 @@ frame_details2.grid(row=1, column=1, pady=1, padx=10, sticky=NSEW)
 frame_tabela2=Frame(tb2,width=800, height=100, bg=co1,relief=SOLID)
 frame_tabela2.grid(row=3, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
 
-#Aba 3
-frame_logo3=Frame(tb3,width=850, height=52, bg=co1)
-frame_logo3.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
+# #Aba 3
+# frame_logo3=Frame(tb3,width=850, height=52, bg=co1)
+# frame_logo3.grid(row=0, column=0, pady=0, padx=0, sticky=NSEW, columnspan=5)
 
-frame_details3=Frame(tb3,width=850, height=80, bg=co1,relief=SOLID)
-frame_details3.grid(row=1, column=0, pady=1, padx=10, sticky=NSEW)
+# frame_details3=Frame(tb3,width=850, height=80, bg=co1,relief=SOLID)
+# frame_details3.grid(row=1, column=0, pady=1, padx=10, sticky=NSEW)
 
-frame_tabela3=Frame(tb3,width=700, height=545, bg=co1,relief=SOLID)
-frame_tabela3.grid(row=2, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
+# frame_tabela3=Frame(tb3,width=700, height=545, bg=co1,relief=SOLID)
+# frame_tabela3.grid(row=2, column=0, pady=0, padx=10, sticky=NSEW,columnspan=5)
 
 #-------------------------------------------------------------------- 
 # Trabalhando no frame logo
@@ -131,8 +152,8 @@ app_logo.place(x=5, y=0)
 app_logo2=Label(frame_logo2, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
 app_logo2.place(x=5,y=0)
 
-app_logo3=Label(frame_logo3, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
-app_logo3.place(x=5,y=0)
+# app_logo3=Label(frame_logo3, image=app_lg, text=" Sistema de Registro de Alunos", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co4, fg=co1)
+# app_logo3.place(x=5,y=0)
 #-------------------------------------------------------------------- 
 
 imagem = Image.open('images/logo.png').resize((130,130))
@@ -336,16 +357,16 @@ def mostrar_alunos(order='id'): #
         n+=1
     for item in dados_lista:
         tree_aluno.insert('', 'end', values=item)
-    def on_click(event):
+    def on_click_procurar(event):
         if (tree_aluno.selection() != ()):
             procurar(tree_aluno.item(tree_aluno.selection()[0], 'values'))
-    tree_aluno.bind('<Return>', on_click)
+    tree_aluno.bind('<Button-1>', on_click_procurar)
     
     atualizar_cursos()
 
 
 #--------------------------------------------------------------------atualizacao
-def mostrar_disciplinas():
+def criar_disciplinas():
 
     # creating a treeview with dual scrollbars
     list_header = ["ID","Curso","Disciplina","Período"]
@@ -381,29 +402,36 @@ def mostrar_disciplinas():
 
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
-    def on_click(event):
+    def on_click_procurar(event):
         if (tree_aluno.selection() != ()):
             procurar_disciplina(tree_aluno.item(tree_aluno.selection()[0], 'values'))
-    tree_aluno.bind('<Return>', on_click)
+    def on_click_tela(event):
+        if (tree_aluno.selection() != ()):
+            dados = tree_aluno.item(tree_aluno.selection()[0], 'values')
+            periodo = dados[3]
+            disciplina_name = dados[2]
+            curso_name = dados[1]
+            tela_alunos_disciplinas(disciplina_name, periodo, curso_name)
+    tree_aluno.bind('<Button-1>', on_click_procurar)
+    tree_aluno.bind('<Return>', on_click_tela)
 #--------------------------------------------------------------------
-#--------------------------------------------------------------------atualizacao
 
-def mostrar_cursos():
-
+def mostrar_disciplina(curso_name, periodo):
     # creating a treeview with dual scrollbars
-    list_header = ["ID","Disciplinas","Curso","Período"]
+    list_header = ["Alunos"]
 
-    tree_aluno = ttk.Treeview(frame_tabela3, selectmode="extended",columns=list_header, show="headings",height=16)
-    
+    tree_aluno = ttk.Treeview(frame_tabela_aluno, selectmode="extended",columns=list_header, show="headings",height=18)
+    curso_id = cursos_db.check_course_exists(curso_name)
+    print(curso_id)
     # view all students
-    df_list = []
+    df_list = sistema_academico.get_students_one_discipline(curso_id, periodo)
 
     
 
     # vertical scrollbar
-    vsb = ttk.Scrollbar(frame_tabela3, orient="vertical", command=tree_aluno.yview)   
+    vsb = ttk.Scrollbar(frame_tabela_aluno, orient="vertical", command=tree_aluno.yview)   
     # horizontal scrollbar
-    hsb = ttk.Scrollbar(frame_tabela3, orient="horizontal", command=tree_aluno.xview)
+    hsb = ttk.Scrollbar(frame_tabela_aluno, orient="horizontal", command=tree_aluno.xview)
 
     tree_aluno.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
     tree_aluno.grid(column=0, row=1, sticky='nsew')
@@ -411,8 +439,8 @@ def mostrar_cursos():
     hsb.grid(column=0, row=2, sticky='ew')
     frame_tabela.grid_rowconfigure(0, weight=12)
 
-    hd=["center","center","center","center"]
-    h=[45,400,200,125]
+    hd=["center"]
+    h=[570]
     n=0
 
     for col in list_header:
@@ -425,7 +453,8 @@ def mostrar_cursos():
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
 
-#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------atualizacao
 botao_carregar = Button(frame_details, command=escolher_imagem, text='Carregar Foto'.upper(), width=20, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
 
@@ -502,15 +531,15 @@ c_disciplina2.place(x=4,y=140)
 #--------------------------------------------------------------------
 #aba3
 
-l_nome=Label(frame_details3, text="Procurar Aluno [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
-l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
+# l_nome=Label(frame_details3, text="Procurar Aluno [Entra ID]", anchor=NW, font=("Ivy 10"), bg=co1, fg=co4)
+# l_nome.grid(row=0, column=0, pady=10, padx=0, sticky=NSEW)
 
-e_procurar=Entry(frame_tabela3, width=5, justify="center", relief="solid", font=("Ivy 10"))
-e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
+# e_procurar=Entry(frame_tabela3, width=5, justify="center", relief="solid", font=("Ivy 10"))
+# e_procurar.grid(row=1, column=0, pady=10, padx=0, sticky=NSEW)
 
-botao_procurar=Button(frame_details3,command="",text="Procurar",width=12, anchor=CENTER, overrelief=RIDGE,
-                      font=('Ivy 7 bold'), bg=co1,fg=co0)
-botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
+# botao_procurar=Button(frame_details3,command="",text="Procurar",width=12, anchor=CENTER, overrelief=RIDGE,
+#                       font=('Ivy 7 bold'), bg=co1,fg=co0)
+# botao_procurar.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 
 #--------------------------------------------------------------------atualizacao
 #Procurar aluno aba1
@@ -547,7 +576,7 @@ def adicionar_disciplina():
     cursoDisciplina_db.create_course_disciplina([course_id, disciplina_id])
 
     limpando_inputs()
-    mostrar_disciplinas()
+    criar_disciplinas()
     atualizar_cursos()
 
 def deletar_disciplina():
@@ -561,7 +590,7 @@ def deletar_disciplina():
     cursoDisciplina_db.delete_course_discipline(curso_disciplina_id)
     disciplina_db.delete_discipline(disciplina_id[0])
     limpando_inputs()
-    mostrar_disciplinas()
+    criar_disciplinas()
     atualizar_cursos()
 
 def procurar_disciplina(id=None): #
@@ -599,13 +628,13 @@ def atualizar_disciplina():
             return
     if (not(course_id)):
         course_id = cursos_db.create_course(curso_name)
-        
+
     disciplina_id = cursoDisciplina_db.get_discipline_id(cursoDisciplina_id)
     disciplina_db.update_discipline([nome, periodo, disciplina_id[0]])
     cursoDisciplina_db.update_course_discipline([course_id, disciplina_id[0], cursoDisciplina_id])
 
     limpando_inputs() 
-    mostrar_disciplinas()
+    criar_disciplinas()
 
 #--------------------------------------------------------------------atualizacao
 
@@ -662,5 +691,5 @@ app_deletar2.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
 
 #chamar a tabela
 mostrar_alunos()
-mostrar_disciplinas()
+criar_disciplinas()
 janela.mainloop()
