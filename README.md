@@ -34,9 +34,9 @@ Para executar o projeto em sua máquina, siga os passos abaixo:
 ### Passos
 
 1. Clone o repositório em sua máquina:
-   ```bash
-   git clone https://github.com/franciscocolatino/Sistema-Academico.git
-
+  ```bash
+  git clone https://github.com/franciscocolatino/Sistema-Academico.git
+  ```
 2. Acesse o repositório usando:
   ```bash
   cd Sistema-Academico
