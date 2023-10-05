@@ -42,8 +42,8 @@ class CursoDisciplina:
         self.c.execute("SELECT COUNT(*) FROM cursos_disciplinas WHERE curso_id=?", (course_id,))
         dados = self.c.fetchone()
         return dados[0]
-    def get_discipline_id(self, courseDisciplineId):
-        self.c.execute("SELECT disciplina_id FROM cursos_disciplinas WHERE id=?", (courseDisciplineId,))
+    def get_discipline_and_course_id(self, courseDisciplineId):
+        self.c.execute("SELECT disciplina_id, curso_id FROM cursos_disciplinas WHERE id=?", (courseDisciplineId,))
         dados = self.c.fetchone()
         return dados
     def delete_course_discipline(self, id):

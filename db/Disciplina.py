@@ -21,7 +21,6 @@ class Disciplina:
     def get_all_discipline(self):
         self.c.execute("SELECT * FROM disciplinas")
         dados = self.c.fetchall()
-        print(dados)
         return dados
     def update_discipline(self, novos_valores):
         self.c.execute("UPDATE disciplinas SET nome=?, periodo=? WHERE id=?", novos_valores)

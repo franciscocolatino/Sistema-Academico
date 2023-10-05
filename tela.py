@@ -1,19 +1,12 @@
-import sys
-import os
-
-
 from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog as fd
 from PIL import ImageTk, Image
-from tkcalendar import Calendar, DateEntry
-from datetime import date
+from tkcalendar import DateEntry
 
-
-from main import *
-from db.app import *
+from db.main import *
 
 co0 = "#2e2d2b"  # Preta
 co1 = "#feffff"  # Branca   
@@ -28,12 +21,11 @@ co9 = "#e9edf5"   # + verde
 co10 = "#003452" # azul
 #criando janela
 janela=Tk()
-janela.title("Sistema de Registro de Alunos")
+janela.title("Sistema Acadêmico")
 janela.geometry("810x545")
 janela.configure(background=co1)
 janela.resizable(width=FALSE, height=FALSE)
 
-#-----------------------------------------------------------alteração
 janelatabs=ttk.Notebook(janela)
 janelatabs.place(x=0,y=0,width=810,height=545)
 tb1=Frame(janelatabs)
@@ -42,8 +34,6 @@ tb2=Frame(janelatabs)
 janelatabs.add(tb1, text="Registro")
 janelatabs.add(tb2, text="Disciplinas")
 
-
-#---------------------------------------------------------------------
 def sobre():
     Help=Tk()
     Help.title("Sobre o projeto:")
@@ -87,9 +77,6 @@ menuopcoes=Menu(barrademenus, tearoff=0)
 menuopcoes.add_command(label="Sobre",command=sobre)
 janela.config(menu=menuopcoes)
 
-
-
-#-------------------------------------------------------------------- atualizaçao
 # Criando Frames
 
 #Aba1
@@ -130,13 +117,8 @@ app_lg = ImageTk.PhotoImage(app_lg)
 app_logo = Label(frame_logo, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=('Verdana 15'), bg=co10, fg=co1)
 app_logo.place(x=5, y=0)
 
-
-#-------------------------------------------------------------------- atualizaçao
 app_logo2=Label(frame_logo2, image=app_lg, text=" Sistema Acadêmico", width=850, compound=LEFT, anchor=NW, font=("Verdana 15"), bg=co10, fg=co1)
 app_logo2.place(x=5,y=0)
-
-
-#-------------------------------------------------------------------- 
 
 imagem = Image.open('images/logo.png').resize((130,130))
 imagem = ImageTk.PhotoImage(imagem)
@@ -177,10 +159,10 @@ def criar():
     if (not(course_id)):
         course_id = cursos_db.create_course(curso_name)
     lista=[nome,email,tel,sexo,data,endereco,img,periodo,course_id]
-    sistema_academico.register_student(lista)
+
+    alunos_db.register_student(lista)
 
     limpando_inputs()
-
     imagem_logo()
     mostrar_alunos()
 
@@ -192,8 +174,8 @@ def procurar(id=None):
         e_procurar.delete(0, END)
         id = id[0]
         e_procurar.insert(END, id)
-    dados = sistema_academico.search_student(id)
-     #-------------------------------------------------------------------- atualizaçao
+    dados = alunos_db.search_student(id)
+
     if dados==None:
         messagebox.showerror("Erro", "Esse aluno não existe!")
     else:
@@ -231,15 +213,16 @@ def atualizar():
     img = imagem_string
     periodo = c_periodo.get()
     curso_name = c_curso.get().capitalize()
-    curso_id = cursos_db.get_course_id(curso_name)
-    lista=[nome,email,tel,sexo,data,endereco,img,periodo,curso_id[0],id_aluno]
+    curso_id = cursos_db.check_course_exists(curso_name)
+    if (not(curso_id)):
+        curso_id = cursos_db.create_course(curso_name)
+    lista=[nome,email,tel,sexo,data,endereco,img,periodo,curso_id ,id_aluno]
 
     for item in lista:
         if (item == ''):
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
-    print(lista)
-    sistema_academico.update_student(lista)
+    alunos_db.update_student(lista)
 
     limpando_inputs() 
     imagem_logo()
@@ -249,18 +232,19 @@ def deletar():
     global imagem, imagem_string, l_imagem
 
     id_aluno = int(e_procurar.get())
-    aluno = sistema_academico.search_student(id_aluno)
-    sistema_academico.delete_student(id_aluno)
-    countOne = cursoDisciplina_db.count_discipline_has_one_course(aluno[-1])
-    countTwo = sistema_academico.count_students_has_one_course(aluno[-1])
-    print(countOne)
-    print(countTwo)
+    aluno = alunos_db.search_student(id_aluno)
+    curso_id = int(aluno[-2])
+
+    alunos_db.delete_student(id_aluno)
+    countOne = cursoDisciplina_db.count_discipline_has_one_course(curso_id)
+    countTwo = alunos_db.count_students_has_one_course(curso_id)
+
     if (countOne == 0 and countTwo == 0):
-        cursos_db.delete_course(aluno[-2])
+        cursos_db.delete_course(curso_id)
+        atualizar_cursos()
     limpando_inputs()
     imagem_logo()
     mostrar_alunos()
-    atualizar_cursos()
 
 def limpando_inputs():
     e_nome.delete(0, END)
@@ -314,7 +298,7 @@ def mostrar_alunos(order='id'): #
 
     lista_cabecalho = ['id', 'Nome', 'email', 'Telefone', 'sexo', 'Data', 'Endereço', 'P', 'Curso']
 
-    dados_lista = sistema_academico.view_all_students(order)
+    dados_lista = alunos_db.view_all_students(order)
 
     tree_aluno = ttk.Treeview(frame_tabela, selectmode='extended', columns=lista_cabecalho, show='headings')
     
@@ -348,7 +332,6 @@ def mostrar_alunos(order='id'): #
     atualizar_cursos()
 
 
-#--------------------------------------------------------------------atualizacao
 def criar_disciplinas():
 
     # creating a treeview with dual scrollbars
@@ -378,7 +361,7 @@ def criar_disciplinas():
 
     for col in list_header:
         tree_aluno.heading(col, text=col.title(), anchor=NW)
-        # adjust the column's width to the header string
+        
         tree_aluno.column(col, width=h[n],anchor=hd[n])
 
         n+=1
@@ -391,14 +374,13 @@ def criar_disciplinas():
     def on_click_tela(event):
         if (tree_aluno.selection() != ()):
             dados = tree_aluno.item(tree_aluno.selection()[0], 'values')
-            print(dados)
+
             periodo = dados[3]
             disciplina_name = dados[2]
             curso_name = dados[1]
             tela_alunos_disciplinas(disciplina_name, periodo, curso_name)
     tree_aluno.bind('<Button-1>', on_click_procurar)
     tree_aluno.bind('<Return>', on_click_tela)
-#--------------------------------------------------------------------
 
 def mostrar_disciplina(curso_name, periodo):
     # creating a treeview with dual scrollbars
@@ -407,7 +389,7 @@ def mostrar_disciplina(curso_name, periodo):
     tree_aluno = ttk.Treeview(frame_tabela_aluno, selectmode="extended",columns=list_header, show="headings",height=18)
     curso_id = cursos_db.check_course_exists(curso_name)
     # view all students
-    df_list = sistema_academico.get_students_one_discipline(curso_id, periodo)
+    df_list = alunos_db.get_students_one_discipline(curso_id, periodo)
     # vertical scrollbar
     vsb = ttk.Scrollbar(frame_tabela_aluno, orient="vertical", command=tree_aluno.yview)   
     # horizontal scrollbar
@@ -425,7 +407,7 @@ def mostrar_disciplina(curso_name, periodo):
 
     for col in list_header:
         tree_aluno.heading(col, text=col.title(), anchor=NW)
-        # adjust the column's width to the header string
+        
         tree_aluno.column(col, width=h[n],anchor=hd[n])
 
         n+=1
@@ -433,8 +415,6 @@ def mostrar_disciplina(curso_name, periodo):
     for item in df_list:
         tree_aluno.insert('', 'end', values=item)
 
-
-#--------------------------------------------------------------------atualizacao
 botao_carregar = Button(frame_details, command=escolher_imagem, text='CARREGAR FOTO', width=17, compound=CENTER, anchor=CENTER, overrelief=RIDGE, font=('Ivy 7 bold'), bg=co1, fg=co0)
 botao_carregar.place(x=410, y=160)
 
@@ -515,11 +495,8 @@ imagem2=ImageTk.PhotoImage(imagem2)
 
 l_imagem2=Label(frame_details2, image=imagem2, bg=co1, fg=co4)
 l_imagem2.place(x=290,y=70)
-#--------------------------------------------------------------------
 
 
-
-#--------------------------------------------------------------------atualizacao
 #Procurar aluno aba1
 frame_procurar=Frame(frame_botoes,width=40, height=55, bg=co1, relief=RAISED)
 frame_procurar.grid(row=0, column=0, pady=10, padx=10, sticky=NSEW)
@@ -539,16 +516,17 @@ def adicionar_disciplina():
     nome = c_disciplina2.get()
     periodo = e_periodo2.get()
     curso_name=c_curso2.get().capitalize()
-    
+
     course_id = cursos_db.check_course_exists(curso_name)
-    print(course_id)
     disciplina =[nome,periodo, course_id]
+
     for item in disciplina :
         if (item == ''):
             messagebox.showerror('Erro', 'Preencha todos os campos')
             return
     if (not(course_id)):
         course_id = cursos_db.create_course(curso_name)
+        atualizar_cursos()
     disciplina =[nome,periodo]
     disciplina_id = disciplina_db.create_discipline(disciplina)
     cursoDisciplina_db.create_course_disciplina([course_id, disciplina_id])
@@ -556,21 +534,24 @@ def adicionar_disciplina():
 
     limpando_inputs()
     criar_disciplinas()
-    atualizar_cursos()
 
 def deletar_disciplina():
     curso_disciplina_id = int(e_procurar2.get())
-    print(curso_disciplina_id)
     if (curso_disciplina_id == ''):
             messagebox.showerror('Erro', 'Preencha o campo "Procurar disciplina" informando o id')
             return
-    disciplina_id = cursoDisciplina_db.get_discipline_id(curso_disciplina_id)
-    print(disciplina_id)
+    disciplina_id, curso_id = cursoDisciplina_db.get_discipline_and_course_id(curso_disciplina_id) 
+
     cursoDisciplina_db.delete_course_discipline(curso_disciplina_id)
-    disciplina_db.delete_discipline(disciplina_id[0])
+    disciplina_db.delete_discipline(disciplina_id)
+    countOne = cursoDisciplina_db.count_discipline_has_one_course(curso_id)
+    countTwo = alunos_db.count_students_has_one_course(curso_id)
+
+    if (countOne == 0 and countTwo == 0):
+        cursos_db.delete_course(curso_id)
+        atualizar_cursos()
     limpando_inputs()
     criar_disciplinas()
-    atualizar_cursos()
 
 def procurar_disciplina(id=None): #
     if (id == None):
@@ -580,12 +561,10 @@ def procurar_disciplina(id=None): #
         id = id[0]
         e_procurar2.insert(END, id)
     dados = cursoDisciplina_db.get_discipline_with_course(id)
-     #-------------------------------------------------------------------- atualizaçao
     if dados==None:
         messagebox.showerror("Erro", "Esse disciplina não existe")
     else:
         limpando_inputs()
-        print(dados)
         c_curso2.insert(END, dados[1])
         c_disciplina2.insert(END, dados[2])
         e_periodo2.insert(END, dados[3])
@@ -608,14 +587,14 @@ def atualizar_disciplina():
     if (not(course_id)):
         course_id = cursos_db.create_course(curso_name)
 
-    disciplina_id = cursoDisciplina_db.get_discipline_id(cursoDisciplina_id)
-    disciplina_db.update_discipline([nome, periodo, disciplina_id[0]])
-    cursoDisciplina_db.update_course_discipline([course_id, disciplina_id[0], cursoDisciplina_id])
+    dados = cursoDisciplina_db.get_discipline_and_course_id(cursoDisciplina_id)
+    disciplina_id = dados[0]
+
+    disciplina_db.update_discipline([nome, periodo, disciplina_id])
+    cursoDisciplina_db.update_course_discipline([course_id, disciplina_id, cursoDisciplina_id])
 
     limpando_inputs() 
     criar_disciplinas()
-
-#--------------------------------------------------------------------atualizacao
 
 #Procurar disciplina aba2
 frame_procurar2=Frame(frame_botoes2,width=40, height=55, bg=co1, relief=RAISED)
@@ -631,7 +610,6 @@ botao_procurar2=Button(frame_procurar2,command=procurar_disciplina,text="Procura
                       font=('Ivy 7 bold'), bg=co1,fg=co0)
 botao_procurar2.grid(row=1, column=1, pady=10, padx=0, sticky=NSEW)
 #--------------------------------------------------------------------
-
 
 #botoes aba1
 app_img_adicionar=Image.open("images/mais.png")
@@ -667,8 +645,7 @@ app_atualizar2.grid(row=2, column=0, pady=5, padx=10, sticky=NSEW)
 app_deletar2=Button(frame_botoes2,command=deletar_disciplina,image=app_img_deletar,relief=GROOVE, text=" Deletar",width=100,compound=LEFT, overrelief=RIDGE,font=('Ivy 11'), bg=co1,fg=co0)
 app_deletar2.grid(row=3, column=0, pady=5, padx=10, sticky=NSEW)
 
-
-#chamar a tabela
+# Iniciando aplicação
 mostrar_alunos()
 criar_disciplinas()
 janela.mainloop()

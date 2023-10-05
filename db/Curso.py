@@ -23,20 +23,14 @@ class Curso:
         valores = set()
         for tupla in dados:
             valores.add(tupla[0]) 
-        print(tuple(valores))
         return tuple(valores)
     def check_course_exists(self, name):
         self.c.execute("SELECT id FROM cursos WHERE nome=?", (name,))
         curso_id = self.c.fetchone()
         if curso_id:
-            print(curso_id[0])
             return curso_id[0]
         else:
             return False
-    def get_course_id(self, name):
-        self.c.execute("SELECT id FROM cursos WHERE nome=?", (name,))
-        dados = self.c.fetchone()
-        return dados
     def delete_course(self, id):
         self.c.execute("DELETE FROM cursos WHERE id=?", (id,))
         self.conn.commit()

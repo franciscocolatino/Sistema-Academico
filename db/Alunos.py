@@ -1,7 +1,7 @@
 import sqlite3
 from tkinter import messagebox
 
-class SistemaAcademico:
+class Alunos:
     def __init__(self):
         self.conn = sqlite3.connect('estudante.db')
         self.c = self.conn.cursor()
@@ -62,6 +62,4 @@ class SistemaAcademico:
     def get_students_one_discipline(self, curso_id, periodo):
         self.c.execute("SELECT nome FROM estudantes WHERE curso_id=? AND periodo=?", (curso_id, periodo))
         dados = self.c.fetchall()
-        print(dados)
         return dados
-sistema_academico = SistemaAcademico()
