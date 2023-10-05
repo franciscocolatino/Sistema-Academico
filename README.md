@@ -1,3 +1,8 @@
+Projeto criado por Anderson da Silva Passos e Francisco Colatino
+
+Olá, nós sonos da Universidade Federal de Alagoas (UFAL) e criamos esse projeto para a disciplina de Algoritmos de Pragramção (APC) como parte da nota da AB2.
+
+
 -------------------------------------------------------------------------------------------------
 
 Siga as instruções e coloque todos os arquivos em um mesmo diretório.
