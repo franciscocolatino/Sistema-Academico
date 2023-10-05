@@ -7,7 +7,7 @@
   <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQpP7EwzsfKrdwxBIpCBE2Nb5YjYFTLYAY4DX_9dBRZST-5oZ-M" alt="Logo do Sistema Acadêmico">
 </p>
 
-Olá, nós somos da Universidade Federal de Alagoas (UFAL) e criamos este projeto para a disciplina de Algoritmos de Programação (APC) como parte da nota da AB2.
+Olá, nós somos da Universidade Federal de Alagoas (UFAL) e criamos este projeto para a disciplina de Algoritmos e Programação de Computadores (APC) como parte da nota da AB2.
 
 ---
 
